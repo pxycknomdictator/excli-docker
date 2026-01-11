@@ -1,0 +1,33 @@
+{
+    "name": "@excli/docker",
+    "version": "1.0.0",
+    "type": "module",
+    "types": "dist/index.d.mts",
+    "main": "dist/index.mjs",
+    "description": "A Cli tool for creating Docker configurations, supporting both JavaScript and TypeScript.",
+    "scripts": {
+        "build": "tsdown",
+        "dev": "tsdown --watch",
+        "format": "prettier --write .",
+        "start": "node dist/index.mjs",
+        "format:check": "prettier --check \"src/**/*.{ts,js,json}\"",
+        "prepublishOnly": "npm run build",
+        "prepare": "husky"
+    },
+    "keywords": [],
+    "engines": {
+        "node": ">=18.0.0"
+    },
+    "bin": {
+        "excli-docker": "./dist/index.mjs"
+    },
+    "author": "Noman <pxycknomdictator@gmail.com>",
+    "license": "ISC",
+    "devDependencies": {
+        "@types/node": "^25.0.6",
+        "husky": "^9.1.7",
+        "prettier": "^3.7.4",
+        "tsdown": "^0.19.0",
+        "typescript": "^5.9.3"
+    }
+}
