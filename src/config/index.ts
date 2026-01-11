@@ -1,3 +1,13 @@
+import { join } from "node:path";
+
+const rootDir = process.cwd();
+
+const dockerFileName = "Dockerfile";
+const dockerComposeFileName = "compose.yaml";
+
+export const dockerfileLocation = join(rootDir, dockerFileName);
+export const dockerComposeFileLocation = join(rootDir, dockerComposeFileName);
+
 export const lockFiles = {
     npm: "package-lock.json",
     yarn: "yarn.lock",
