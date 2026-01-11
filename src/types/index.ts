@@ -3,3 +3,8 @@ export type Config = {
     database: "mysql" | "mariadb" | "postgres" | "mongodb";
     packageManager: "npm" | "yarn" | "pnpm" | "bun";
 };
+
+export type GenerateFileArgs = {
+    fileLocation: string;
+    fileContent: string;
+};
