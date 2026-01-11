@@ -4,7 +4,7 @@
     "type": "module",
     "types": "dist/index.d.mts",
     "main": "dist/index.mjs",
-    "description": "A Cli tool for creating Docker configurations, supporting both JavaScript and TypeScript.",
+    "description": "A CLI tool for generating Docker configurations for JavaScript and TypeScript projects with customizable package managers and databases.",
     "scripts": {
         "build": "tsdown",
         "dev": "tsx watch src/index.ts",
@@ -14,7 +14,17 @@
         "prepublishOnly": "npm run build",
         "prepare": "husky"
     },
-    "keywords": [],
+    "keywords": [
+        "docker",
+        "dockerfile",
+        "cli",
+        "typescript",
+        "javascript",
+        "generator",
+        "containerization",
+        "devops",
+        "build-tool"
+    ],
     "engines": {
         "node": ">=18.0.0"
     },
