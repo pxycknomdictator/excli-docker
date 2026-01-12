@@ -8,3 +8,8 @@ export type GenerateFileArgs = {
     fileLocation: string;
     fileContent: string;
 };
+
+export type EnvConfig = {
+    baseEnv: Record<string, string>;
+    dockerEnv: Record<string, string>;
+};
