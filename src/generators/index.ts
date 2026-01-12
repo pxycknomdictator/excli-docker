@@ -1,4 +1,5 @@
-import { generateFile } from "src/utils";
+import { existsSync } from "node:fs";
+import { appendExistsFile, generateFile } from "src/utils";
 import {
     dbSections,
     envConfigs,
@@ -71,7 +72,13 @@ export async function setupEnv(config: Config): Promise<void> {
         },
     ];
 
-    await Promise.all(
-        dotenvs.map(async (env) => await generateFile({ ...env })),
-    );
+    if (existsSync(envFileLocation) || existsSync(envExampleFileLocation)) {
+        await Promise.all(
+            dotenvs.map(async (env) => await appendExistsFile({ ...env })),
+        );
+    } else {
+        await Promise.all(
+            dotenvs.map(async (env) => await generateFile({ ...env })),
+        );
+    }
 }
