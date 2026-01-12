@@ -1,6 +1,10 @@
-import { join } from "node:path";
 import { generateFile } from "src/utils";
-import { dbSections, envConfigs } from "src/config";
+import {
+    dbSections,
+    envConfigs,
+    envExampleFileLocation,
+    envFileLocation,
+} from "src/config";
 import type { Config, EnvConfig, GenerateFileArgs } from "src/types";
 
 function getEnvVariables(config: Config): EnvConfig {
@@ -55,19 +59,16 @@ function formatEnvExampleFile(config: Config): string {
     return lines.join("\n");
 }
 
-export async function setupEnv(
-    targetDir: string,
-    config: Config,
-): Promise<void> {
-    const envFile = join(targetDir, ".env");
-    const envExampleFile = join(targetDir, ".env.example");
-
+export async function setupEnv(config: Config): Promise<void> {
     const envContent = formatEnvFile(config);
     const envExampleContent = formatEnvExampleFile(config);
 
     const dotenvs: GenerateFileArgs[] = [
-        { fileLocation: envFile, fileContent: envContent },
-        { fileLocation: envExampleFile, fileContent: envExampleContent },
+        { fileLocation: envFileLocation, fileContent: envContent },
+        {
+            fileLocation: envExampleFileLocation,
+            fileContent: envExampleContent,
+        },
     ];
 
     await Promise.all(

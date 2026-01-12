@@ -2,9 +2,13 @@ import { join } from "node:path";
 
 const rootDir = process.cwd();
 
+const envFileName = ".env";
+const envExampleFileName = ".env.example";
 const dockerFileName = "Dockerfile";
 const dockerComposeFileName = "compose.yaml";
 
+export const envFileLocation = join(rootDir, envFileName);
+export const envExampleFileLocation = join(rootDir, envExampleFileName);
 export const dockerfileLocation = join(rootDir, dockerFileName);
 export const dockerComposeFileLocation = join(rootDir, dockerComposeFileName);
 
