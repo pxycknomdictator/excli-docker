@@ -11,7 +11,7 @@ export async function generateFile(fileArgs: GenerateFileArgs) {
 
 export async function appendExistsFile(fileArgs: GenerateFileArgs) {
     const { fileLocation, fileContent } = fileArgs;
-    await appendFile(fileLocation, fileContent, "utf-8");
+    await appendFile(fileLocation, `\n${fileContent}`, "utf-8");
 }
 
 export async function setupDocker(config: Config) {
