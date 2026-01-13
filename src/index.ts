@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { setupDocker } from "./utils";
 import { setupEnv } from "./generators";
 import { getUserInputs } from "./cli/prompts";
