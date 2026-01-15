@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 
-import { setupDocker } from "./utils";
-import { setupEnv } from "./generators";
 import { getUserInputs } from "./cli/prompts";
+import { setupDocker, setupEnv } from "./generators";
 
 async function main() {
     const config = getUserInputs();

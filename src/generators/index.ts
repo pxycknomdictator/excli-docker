@@ -2,10 +2,16 @@ import { existsSync } from "node:fs";
 import { appendExistsFile, generateFile } from "src/utils";
 import {
     dbSections,
+    dockerComposeFileLocation,
+    dockerfileLocation,
+    dockerIgnoreFileLocation,
     envConfigs,
     envExampleFileLocation,
     envFileLocation,
 } from "src/config";
+import { getDockerfile } from "src/docker/builder";
+import { getDockerComposeFile } from "src/docker/compose";
+import { getDockerIgnoreFile } from "src/docker/dockerignore";
 import type { Config, EnvConfig, GenerateFileArgs } from "src/types";
 
 function getEnvVariables(config: Config): EnvConfig {
@@ -58,6 +64,28 @@ function formatEnvExampleFile(config: Config): string {
     });
 
     return lines.join("\n");
+}
+
+export async function setupDocker(config: Config) {
+    const dockerContent = getDockerfile(config);
+    const dockerComposeContent = getDockerComposeFile(config);
+    const dockerIgnoreContent = getDockerIgnoreFile();
+
+    const docker: GenerateFileArgs[] = [
+        { fileLocation: dockerfileLocation, fileContent: dockerContent },
+        {
+            fileLocation: dockerComposeFileLocation,
+            fileContent: dockerComposeContent,
+        },
+        {
+            fileLocation: dockerIgnoreFileLocation,
+            fileContent: dockerIgnoreContent,
+        },
+    ];
+
+    await Promise.all(
+        docker.map(async (whale) => await generateFile({ ...whale })),
+    );
 }
 
 export async function setupEnv(config: Config): Promise<void> {
