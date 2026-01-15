@@ -15,15 +15,17 @@
         "prepare": "husky"
     },
     "keywords": [
+        "@excli/express",
+        "@excli/docker",
         "docker",
         "dockerfile",
+        "docker-compose",
         "cli",
         "typescript",
         "javascript",
         "generator",
-        "containerization",
-        "devops",
-        "build-tool"
+        "database",
+        "devops"
     ],
     "engines": {
         "node": ">=18.0.0"
