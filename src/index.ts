@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { getUserInputs } from "./cli/prompts";
+import { getUserInputs } from "./cli";
 import { setupDocker, setupEnv } from "./generators";
 
 async function main() {
