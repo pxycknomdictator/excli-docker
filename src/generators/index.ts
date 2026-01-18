@@ -1,4 +1,5 @@
 import { existsSync } from "node:fs";
+import yaml from "js-yaml";
 import {
     appendExistsFile,
     formatEnvExampleFile,
@@ -19,8 +20,12 @@ import type { Config, GenerateFileArgs } from "src/types";
 
 export async function setupDocker(config: Config) {
     const dockerContent = getDockerfile(config);
-    const dockerComposeContent = getDockerComposeFile(config);
+    const dockerComposeContentObject = getDockerComposeFile(config);
     const dockerIgnoreContent = getDockerIgnoreFile();
+
+    const dockerComposeContent = yaml.dump(dockerComposeContentObject, {
+        indent: 4,
+    });
 
     const docker: GenerateFileArgs[] = [
         { fileLocation: dockerfileLocation, fileContent: dockerContent },
