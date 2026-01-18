@@ -2,7 +2,7 @@ import { isCancel, select } from "@clack/prompts";
 import { terminate } from "src/utils";
 import type { Config } from "src/types";
 
-export async function promptLanguage(): Promise<Config["language"]> {
+async function promptLanguage(): Promise<Config["language"]> {
     const language = (await select({
         message: "Select your programming language:",
         options: [
@@ -16,7 +16,7 @@ export async function promptLanguage(): Promise<Config["language"]> {
     return language;
 }
 
-export async function promptDatabase(): Promise<Config["database"]> {
+async function promptDatabase(): Promise<Config["database"]> {
     const db = (await select({
         message: "Select your database:",
         options: [
@@ -32,7 +32,7 @@ export async function promptDatabase(): Promise<Config["database"]> {
     return db;
 }
 
-export async function promptPkgManager(): Promise<Config["packageManager"]> {
+async function promptPkgManager(): Promise<Config["packageManager"]> {
     const pkgManager = (await select({
         message: "Select your package manager:",
         options: [
@@ -46,4 +46,12 @@ export async function promptPkgManager(): Promise<Config["packageManager"]> {
     if (isCancel(pkgManager)) terminate("Process cancelled ❌");
 
     return pkgManager;
+}
+
+export async function interactiveInput(): Promise<Config> {
+    const database = await promptDatabase();
+    const language = await promptLanguage();
+    const packageManager = await promptPkgManager();
+
+    return { database, language, packageManager };
 }
