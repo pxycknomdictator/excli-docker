@@ -45,6 +45,7 @@
         "typescript": "^5.9.3"
     },
     "dependencies": {
+        "@clack/prompts": "^0.11.0",
         "yargs": "^18.0.0"
     }
 }
