@@ -4,7 +4,7 @@ import { getUserInputs } from "./cli";
 import { setupDocker, setupEnv } from "./generators";
 
 async function main() {
-    const config = getUserInputs();
+    const config = await getUserInputs();
     await Promise.all([setupDocker(config), setupEnv(config)]);
 }
 

@@ -1,4 +1,5 @@
 import { writeFile, appendFile } from "node:fs/promises";
+import { cancel } from "@clack/prompts";
 import { dbSections, envConfigs } from "src/config";
 import type { Config, EnvConfig, GenerateFileArgs } from "src/types";
 
@@ -62,4 +63,9 @@ export function formatEnvExampleFile(config: Config): string {
     });
 
     return lines.join("\n");
+}
+
+export function terminate(message: string): never {
+    cancel(message);
+    process.exit(0);
 }

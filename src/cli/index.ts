@@ -1,8 +1,9 @@
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
+import { promptDatabase, promptLanguage, promptPkgManager } from "./prompts";
 import type { Config } from "../types";
 
-export function getUserInputs(): Config {
+export async function getUserInputs(): Promise<Config> {
     const args = process.argv.slice(2);
     if (args.length > 0) return yargsInput();
     return interactiveInput();
@@ -113,6 +114,10 @@ export function yargsInput(): Config {
     return config;
 }
 
-export function interactiveInput(): Config {
-    return { database: "mariadb", language: "ts", packageManager: "yarn" };
+export async function interactiveInput(): Promise<Config> {
+    const database = await promptDatabase();
+    const language = await promptLanguage();
+    const packageManager = await promptPkgManager();
+
+    return { database, language, packageManager };
 }
