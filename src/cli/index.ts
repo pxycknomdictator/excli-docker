@@ -3,7 +3,9 @@ import { hideBin } from "yargs/helpers";
 import type { Config } from "../types";
 
 export function getUserInputs(): Config {
-    return yargsInput();
+    const args = process.argv.slice(2);
+    if (args.length > 0) return yargsInput();
+    return interactiveInput();
 }
 
 export function yargsInput(): Config {
@@ -109,4 +111,8 @@ export function yargsInput(): Config {
     };
 
     return config;
+}
+
+export function interactiveInput(): Config {
+    return { database: "mariadb", language: "ts", packageManager: "yarn" };
 }
