@@ -151,6 +151,29 @@ function dockerMariadb(): DockerComposeConfig {
     };
 }
 
+export function dockerRedis(): DockerComposeConfig {
+    return {
+        services: {
+            database: {
+                container_name: "redis_container",
+                image: "redis/redis-stack-server:7.4.0-v8",
+                ports: ["${REDIS_PORT}:6379"],
+                environment: {
+                    REDIS_ARGS: "${REDIS_ARGS}",
+                },
+                networks: ["redis_network"],
+                volumes: ["redis_volume:/data"],
+            },
+        },
+        networks: {
+            redis_network: null,
+        },
+        volumes: {
+            redis_volume: null,
+        },
+    };
+}
+
 export function getDockerComposeFile(config: Config): DockerComposeConfig {
     switch (config.database) {
         case "mongodb":
