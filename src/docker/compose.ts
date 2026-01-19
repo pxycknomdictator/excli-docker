@@ -35,10 +35,10 @@ function dockerMongodb(): DockerComposeConfig {
             },
         },
         networks: {
-            app_network: null,
+            app_network: {},
         },
         volumes: {
-            mongo_volume: null,
+            mongo_volume: {},
         },
     };
 }
@@ -71,10 +71,10 @@ function dockerPostgres(): DockerComposeConfig {
             },
         },
         networks: {
-            app_network: null,
+            app_network: {},
         },
         volumes: {
-            pg_volume: null,
+            pg_volume: {},
         },
     };
 }
@@ -107,10 +107,10 @@ function dockerMysql(): DockerComposeConfig {
             },
         },
         networks: {
-            app_network: null,
+            app_network: {},
         },
         volumes: {
-            mysql_volume: null,
+            mysql_volume: {},
         },
     };
 }
@@ -143,10 +143,10 @@ function dockerMariadb(): DockerComposeConfig {
             },
         },
         networks: {
-            app_network: null,
+            app_network: {},
         },
         volumes: {
-            mariadb_volume: null,
+            mariadb_volume: {},
         },
     };
 }
@@ -166,10 +166,10 @@ export function dockerRedis(): DockerComposeConfig {
             },
         },
         networks: {
-            app_network: null,
+            app_network: {},
         },
         volumes: {
-            redis_volume: null,
+            redis_volume: {},
         },
     };
 }

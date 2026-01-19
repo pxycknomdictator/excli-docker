@@ -28,9 +28,9 @@ export type DockerComposeConfig = {
         };
     };
     networks: {
-        [key: string]: null;
+        [key: string]: {};
     };
     volumes: {
-        [key: string]: null;
+        [key: string]: {};
     };
 };
