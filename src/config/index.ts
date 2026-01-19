@@ -101,6 +101,15 @@ export const envConfigs = {
             PMA_HOST: "database",
         },
     },
+    redis: {
+        baseEnv: {
+            REDIS_URL: "redis://localhost:6379",
+        },
+        dockerEnv: {
+            REDIS_PORT: "6379",
+            REDIS_ARGS: "--appendonly yes --appendfsync everysec",
+        },
+    },
 };
 
 export const dbSections = {
@@ -164,5 +173,12 @@ export const dbSections = {
             "MARIADB_ROOT_PASSWORD",
         ],
         adminKeys: ["ADMIN_PANEL_PORT", "PMA_HOST"],
+    },
+};
+
+export const cacheSelection = {
+    redis: {
+        main: "# Redis Configuration",
+        mainKeys: ["REDIS_PORT", "REDIS_ARGS"],
     },
 };
