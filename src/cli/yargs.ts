@@ -34,6 +34,10 @@ export function yargsInput(): Config {
             description: "Use MariaDB",
             conflicts: ["mongodb", "postgres", "mysql"],
         })
+        .option("redis", {
+            type: "boolean",
+            description: "Use Redis for caching",
+        })
         .option("npm", {
             type: "boolean",
             description: "Use npm",
@@ -91,6 +95,9 @@ export function yargsInput(): Config {
     else if (argv.mariadb) database = "mariadb";
     else throw new Error("Invalid database");
 
+    let cache: Config["cache"] = undefined;
+    if (argv.redis) cache = "redis";
+
     let packageManager: Config["packageManager"];
     if (argv.npm) packageManager = "npm";
     else if (argv.yarn) packageManager = "yarn";
@@ -102,6 +109,7 @@ export function yargsInput(): Config {
         language,
         database,
         packageManager,
+        ...(cache && { cache }),
     };
 
     return config;
