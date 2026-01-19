@@ -175,16 +175,33 @@ export function dockerRedis(): DockerComposeConfig {
 }
 
 export function getDockerComposeFile(config: Config): DockerComposeConfig {
+    let database: DockerComposeConfig;
+
     switch (config.database) {
         case "mongodb":
-            return dockerMongodb();
+            database = dockerMongodb();
+            break;
         case "postgres":
-            return dockerPostgres();
+            database = dockerPostgres();
+            break;
         case "mysql":
-            return dockerMysql();
+            database = dockerMysql();
+            break;
         case "mariadb":
-            return dockerMariadb();
+            database = dockerMariadb();
+            break;
         default:
-            throw new Error("Invalid database selected:");
+            throw new Error("Invalid database selected");
     }
+
+    if (typeof config.cache === "string" && config.cache === "redis") {
+        const redis = dockerRedis();
+        return {
+            services: { ...database.services, ...redis.services },
+            networks: { ...database.networks, ...redis.networks },
+            volumes: { ...database.volumes, ...redis.volumes },
+        };
+    }
+
+    return database;
 }
