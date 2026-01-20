@@ -182,3 +182,5 @@ export const cacheSelection = {
         mainKeys: ["REDIS_PORT", "REDIS_ARGS"],
     },
 };
+
+export const BANNER_FONT = "Standard";

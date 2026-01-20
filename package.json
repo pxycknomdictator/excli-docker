@@ -54,6 +54,7 @@
     },
     "dependencies": {
         "@clack/prompts": "^0.11.0",
+        "figlet": "^1.9.4",
         "js-yaml": "^4.1.1",
         "yargs": "^18.0.0"
     }
