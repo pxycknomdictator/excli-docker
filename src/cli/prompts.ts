@@ -59,6 +59,7 @@ async function promptCache(): Promise<Config["cache"]> {
 }
 
 export async function interactiveInput(): Promise<Config> {
+    console.clear();
     const database = await promptDatabase();
     const language = await promptLanguage();
     const packageManager = await promptPkgManager();
