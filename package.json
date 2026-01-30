@@ -7,7 +7,6 @@
     "description": "A CLI tool for generating Docker configurations for JavaScript and TypeScript projects with customizable package managers and databases.",
     "scripts": {
         "build": "tsdown",
-        "dev": "tsx watch src/index.ts",
         "format": "prettier --write .",
         "start": "node dist/index.mjs",
         "format:check": "prettier --check \"src/**/*.{ts,js,json}\"",
@@ -49,7 +48,6 @@
         "husky": "^9.1.7",
         "prettier": "^3.7.4",
         "tsdown": "^0.19.0",
-        "tsx": "^4.21.0",
         "typescript": "^5.9.3"
     },
     "dependencies": {
