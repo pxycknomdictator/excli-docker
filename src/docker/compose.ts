@@ -60,7 +60,7 @@ function dockerPostgres(): DockerComposeConfig {
             },
             admin: {
                 container_name: "postgres_admin",
-                image: "dpage/pgadmin4:9.11",
+                image: "dpage/pgadmin4:9.12",
                 ports: ["${ADMIN_PANEL_PORT}:80"],
                 environment: {
                     PGADMIN_DEFAULT_EMAIL: "${PGADMIN_DEFAULT_EMAIL}",
