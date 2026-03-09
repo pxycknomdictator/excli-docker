@@ -17,7 +17,7 @@ A CLI tool for generating Docker configurations for JavaScript and TypeScript pr
 
 - 🚀 TypeScript or JavaScript support
 - 🐳 Production-ready Docker configurations
-- 🗄️ Pre-configured databases (MySQL, MariaDB, PostgreSQL, MongoDB)
+- 🗄️ Pre-configured databases (MySQL, MariaDB, PostgreSQL, SQLite, MongoDB)
 - ⚡ Optional Redis cache support
 - 📦 Multiple package manager support (npm, yarn, pnpm, bun)
 - 🛠️ Admin panels included for database management
@@ -40,8 +40,9 @@ npx @excli/docker
 
 The interactive mode will guide you through selecting:
 
+- Database (MySQL, MariaDB, SQLite, PostgreSQL, MongoDB)
 - Programming language (TypeScript or JavaScript)
-- Database (MySQL, MariaDB, PostgreSQL, MongoDB)
+- Redis (optional)
 - Package manager (npm, yarn, pnpm, bun)
 
 #### Quick Setup with Flags
@@ -102,6 +103,9 @@ npx @excli/docker --ts --yarn --mysql
 
 # JavaScript with MariaDB and bun
 npx @excli/docker --js --bun --mariadb
+
+# TypeScript with SQLite and yarn
+npx @excli/docker --ts --yarn --sqlite
 ```
 
 ---
@@ -118,6 +122,7 @@ npx @excli/docker --js --bun --mariadb
 - `--mysql` - MySQL database
 - `--mariadb` - MariaDB database
 - `--postgres` - PostgreSQL database
+- `--sqlite` - SQLite database
 - `--mongodb` - MongoDB database
 
 #### Cache Flags (Optional)
@@ -157,46 +162,6 @@ npx @excli/docker --js --yarn --mongodb --redis
 
 ---
 
-### 🔥 Breaking Changes (v2.0.0)
-
-> **Important:** If you're upgrading from v1.x, please note the following changes:
-
-#### Old Syntax (v1.x) ❌
-
-```bash
-npx @excli/docker --lang=ts --db=postgres --pkgManager=pnpm
-```
-
-#### New Syntax (v2.x) ✅
-
-```bash
-npx @excli/docker --ts --postgres --pnpm
-```
-
-**What Changed:**
-
-- Removed key-value arguments (`--lang=ts`, `--db=postgres`, `--pkgManager=pnpm`)
-- Added simple flag-based arguments (`--ts`, `--postgres`, `--pnpm`)
-- Added interactive mode (no arguments needed)
-- Flags can be used in any order
-
-**Migration Guide:**
-
-| Old (v1.x)          | New (v2.x)   |
-| ------------------- | ------------ |
-| `--lang=ts`         | `--ts`       |
-| `--lang=js`         | `--js`       |
-| `--db=mysql`        | `--mysql`    |
-| `--db=mariadb`      | `--mariadb`  |
-| `--db=postgres`     | `--postgres` |
-| `--db=mongodb`      | `--mongodb`  |
-| `--pkgManager=npm`  | `--npm`      |
-| `--pkgManager=yarn` | `--yarn`     |
-| `--pkgManager=pnpm` | `--pnpm`     |
-| `--pkgManager=bun`  | `--bun`      |
-
----
-
 ### What's Included
 
 #### Generated Files
@@ -218,6 +183,7 @@ Choose the database that fits your needs:
 | **MariaDB**          | phpMyAdmin    | 6969             |
 | **PostgreSQL**       | pgAdmin       | 6969             |
 | **MongoDB**          | Mongo Express | 6969             |
+| **SQLite**           | ---           | ---              |
 | **Redis** (Optional) |
 
 All database admin panels are accessible at `http://localhost:6969` after running `docker compose up`.
@@ -260,27 +226,6 @@ After running `docker compose up`, access your database admin panel at **http://
 - **pgAdmin** - Full-featured PostgreSQL management
 - **phpMyAdmin** - Intuitive MySQL & MariaDB interface
 - **Mongo Express** - Simple MongoDB administration
-
----
-
-### Recent Updates
-
-#### v2.0.0 - Major Update 🎉
-
-- ✅ **Interactive Mode** - No arguments needed, just follow the prompts
-- ✅ **Simplified CLI** - Use simple flags instead of key-value pairs
-- ✅ **Redis Cache Support** - Optional `--redis` flag to add Redis
-- ✅ **Flexible Flag Order** - Flags can be used in any order
-- ✅ **Better Developer Experience** - Faster and more intuitive
-- ⚠️ **Breaking Changes** - See migration guide above
-
-#### Previous Versions
-
-- ✅ Added production-ready Dockerfile templates
-- ✅ Improved environment variable management
-- ✅ Support for multiple package managers
-- ✅ Command-line arguments support with yargs
-- ✅ Cross-platform compatibility improvements
 
 ---
 
