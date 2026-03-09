@@ -1,7 +1,7 @@
 export type Config = {
     language: "ts" | "js";
     cache?: "redis";
-    database: "mysql" | "mariadb" | "postgres" | "mongodb";
+    database: "mysql" | "mariadb" | "sqlite" | "postgres" | "mongodb";
     packageManager: "npm" | "yarn" | "pnpm" | "bun";
 };
 

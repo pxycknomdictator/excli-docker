@@ -86,6 +86,12 @@ export const envConfigs = {
             PMA_HOST: "database",
         },
     },
+    sqlite: {
+        baseEnv: {
+            DB_FILE_NAME: "file:sqlite.db",
+        },
+        dockerEnv: {},
+    },
     mariadb: {
         baseEnv: {
             DATABASE_URL: "mysql://user:password123@localhost:3306/app_db",
@@ -173,6 +179,12 @@ export const dbSections = {
             "MARIADB_ROOT_PASSWORD",
         ],
         adminKeys: ["ADMIN_PANEL_PORT", "PMA_HOST"],
+    },
+    sqlite: {
+        main: "# Sqlite Configuration",
+        admin: "",
+        mainKeys: ["DB_FILE_NAME"],
+        adminKeys: [],
     },
 };
 
