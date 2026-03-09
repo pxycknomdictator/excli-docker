@@ -23,21 +23,24 @@ export async function setupDocker(config: Config) {
     const dockerComposeContentObject = getDockerComposeFile(config);
     const dockerIgnoreContent = getDockerIgnoreFile();
 
-    const dockerComposeContent = yaml.dump(dockerComposeContentObject, {
-        indent: 4,
-    });
-
     const docker: GenerateFileArgs[] = [
         { fileLocation: dockerfileLocation, fileContent: dockerContent },
-        {
-            fileLocation: dockerComposeFileLocation,
-            fileContent: dockerComposeContent,
-        },
         {
             fileLocation: dockerIgnoreFileLocation,
             fileContent: dockerIgnoreContent,
         },
     ];
+
+    if (typeof dockerComposeContentObject !== "undefined") {
+        const dockerComposeContent = yaml.dump(dockerComposeContentObject, {
+            indent: 4,
+        });
+
+        docker.push({
+            fileLocation: dockerComposeFileLocation,
+            fileContent: dockerComposeContent,
+        });
+    }
 
     await Promise.all(
         docker.map(async (whale) => await generateFile({ ...whale })),

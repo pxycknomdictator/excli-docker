@@ -151,7 +151,7 @@ function dockerMariadb(): DockerComposeConfig {
     };
 }
 
-export function dockerRedis(): DockerComposeConfig {
+function dockerRedis(): DockerComposeConfig {
     return {
         services: {
             cache: {
@@ -174,8 +174,11 @@ export function dockerRedis(): DockerComposeConfig {
     };
 }
 
-export function getDockerComposeFile(config: Config): DockerComposeConfig {
-    let database: DockerComposeConfig;
+export function getDockerComposeFile(
+    config: Config,
+): DockerComposeConfig | undefined {
+    let database: DockerComposeConfig | undefined;
+    const hasRedis = config.cache === "redis";
 
     switch (config.database) {
         case "mongodb":
@@ -190,17 +193,24 @@ export function getDockerComposeFile(config: Config): DockerComposeConfig {
         case "mariadb":
             database = dockerMariadb();
             break;
+        case "sqlite":
+            break;
         default:
             throw new Error("Invalid database selected");
     }
 
-    if (typeof config.cache === "string" && config.cache === "redis") {
+    if (hasRedis) {
         const redis = dockerRedis();
-        return {
-            services: { ...database.services, ...redis.services },
-            networks: { ...database.networks, ...redis.networks },
-            volumes: { ...database.volumes, ...redis.volumes },
-        };
+
+        if (database) {
+            return {
+                services: { ...database.services, ...redis.services },
+                networks: { ...database.networks, ...redis.networks },
+                volumes: { ...database.volumes, ...redis.volumes },
+            };
+        }
+
+        return redis;
     }
 
     return database;

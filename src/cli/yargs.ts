@@ -71,10 +71,11 @@ export function yargsInput(): Config {
                 !argv.mongodb &&
                 !argv.postgres &&
                 !argv.mysql &&
-                !argv.mariadb
+                !argv.mariadb &&
+                !argv.sqlite
             ) {
                 throw new Error(
-                    "You must specify a database: --mongodb, --postgres, --mysql, or --mariadb",
+                    "You must specify a database: --mongodb, --postgres, --sqlite, --mysql, or --mariadb",
                 );
             }
             if (!argv.npm && !argv.yarn && !argv.pnpm && !argv.bun) {
@@ -98,6 +99,7 @@ export function yargsInput(): Config {
     else if (argv.postgres) database = "postgres";
     else if (argv.mysql) database = "mysql";
     else if (argv.mariadb) database = "mariadb";
+    else if (argv.sqlite) database = "sqlite";
     else throw new Error("Invalid database");
 
     let cache: Config["cache"] = undefined;
