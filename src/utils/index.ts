@@ -32,16 +32,20 @@ export function formatEnvFile(config: Config): string {
 
     const section = dbSections[config.database];
 
-    lines.push(section.main);
-    section.mainKeys.forEach((key) => {
-        lines.push(`${key}=${dockerEnv[key]}`);
-    });
+    if (!isSqlite) {
+        lines.push(section.main);
+        section.mainKeys.forEach((key) => {
+            lines.push(`${key}=${dockerEnv[key]}`);
+        });
+    }
 
-    lines.push("");
-    lines.push(section.admin);
-    section.adminKeys.forEach((key) => {
-        lines.push(`${key}=${dockerEnv[key]}`);
-    });
+    if (!isSqlite) {
+        lines.push("");
+        lines.push(section.admin);
+        section.adminKeys.forEach((key) => {
+            lines.push(`${key}=${dockerEnv[key]}`);
+        });
+    }
 
     if (config.cache === "redis") {
         const redisEnv = envConfigs.redis;
@@ -74,16 +78,20 @@ export function formatEnvExampleFile(config: Config): string {
 
     const section = dbSections[config.database];
 
-    lines.push(section.main);
-    section.mainKeys.forEach((key) => {
-        lines.push(`${key}=`);
-    });
+    if (!isSqlite) {
+        lines.push(section.main);
+        section.mainKeys.forEach((key) => {
+            lines.push(`${key}=`);
+        });
+    }
 
-    lines.push("");
-    lines.push(section.admin);
-    section.adminKeys.forEach((key) => {
-        lines.push(`${key}=`);
-    });
+    if (!isSqlite) {
+        lines.push("");
+        lines.push(section.admin);
+        section.adminKeys.forEach((key) => {
+            lines.push(`${key}=`);
+        });
+    }
 
     if (config.cache === "redis") {
         const redisSection = cacheSelection.redis;
