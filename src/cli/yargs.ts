@@ -34,6 +34,11 @@ export function yargsInput(): Config {
             description: "Use MariaDB",
             conflicts: ["mongodb", "postgres", "mysql"],
         })
+        .option("sqlite", {
+            type: "boolean",
+            description: "Use Sqlite",
+            conflicts: ["mongodb", "postgres", "mariadb", "mysql"],
+        })
         .option("redis", {
             type: "boolean",
             description: "Use Redis for caching",

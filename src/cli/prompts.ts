@@ -22,6 +22,7 @@ async function promptDatabase(): Promise<Config["database"]> {
         options: [
             { label: "MySQL", value: "mysql" },
             { label: "MariaDB", value: "mariadb" },
+            { label: "Sqlite", value: "sqlite" },
             { label: "PostgreSQL", value: "postgres" },
             { label: "MongoDB", value: "mongodb" },
         ],
