@@ -28,20 +28,17 @@ export function formatEnvFile(config: Config): string {
     if (isSqlite) lines.push(`DB_FILE_NAME=${baseEnv.DB_FILE_NAME}`);
     else lines.push(`DATABASE_URL=${baseEnv.DATABASE_URL}`);
 
-    lines.push("");
-
     const section = dbSections[config.database];
 
     if (!isSqlite) {
-        lines.push(section.main);
+        lines.push(`\n${section.main}`);
         section.mainKeys.forEach((key) => {
             lines.push(`${key}=${dockerEnv[key]}`);
         });
     }
 
     if (!isSqlite) {
-        lines.push("");
-        lines.push(section.admin);
+        lines.push(`\n${section.admin}`);
         section.adminKeys.forEach((key) => {
             lines.push(`${key}=${dockerEnv[key]}`);
         });
@@ -51,10 +48,8 @@ export function formatEnvFile(config: Config): string {
         const redisEnv = envConfigs.redis;
         const redisSection = cacheSelection.redis;
 
-        lines.push("");
-        lines.push("# Redis Connection");
-        lines.push(`REDIS_URL=${redisEnv.baseEnv.REDIS_URL}`);
-        lines.push("");
+        lines.push(`\n# Redis Connection`);
+        lines.push(`REDIS_URL=${redisEnv.baseEnv.REDIS_URL}\n`);
 
         lines.push(redisSection.main);
         lines.push(`REDIS_PORT=${redisEnv.dockerEnv.REDIS_PORT}`);
@@ -74,20 +69,17 @@ export function formatEnvExampleFile(config: Config): string {
     if (isSqlite) lines.push("DB_FILE_NAME=");
     else lines.push("DATABASE_URL=");
 
-    lines.push("");
-
     const section = dbSections[config.database];
 
     if (!isSqlite) {
-        lines.push(section.main);
+        lines.push(`\n${section.main}`);
         section.mainKeys.forEach((key) => {
             lines.push(`${key}=`);
         });
     }
 
     if (!isSqlite) {
-        lines.push("");
-        lines.push(section.admin);
+        lines.push(`\n${section.admin}`);
         section.adminKeys.forEach((key) => {
             lines.push(`${key}=`);
         });
@@ -96,10 +88,8 @@ export function formatEnvExampleFile(config: Config): string {
     if (config.cache === "redis") {
         const redisSection = cacheSelection.redis;
 
-        lines.push("");
-        lines.push("# Redis Connection");
-        lines.push("REDIS_URL=");
-        lines.push("");
+        lines.push(`\n# Redis Connection`);
+        lines.push(`REDIS_URL=\n`);
 
         lines.push(redisSection.main);
         lines.push("REDIS_PORT=");
