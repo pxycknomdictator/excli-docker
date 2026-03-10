@@ -88,7 +88,7 @@ export const envConfigs = {
     },
     sqlite: {
         baseEnv: {
-            DB_FILE_NAME: "file:sqlite.db",
+            DATABASE_URL: "file:sqlite.db",
         },
         dockerEnv: {},
     },
@@ -183,7 +183,7 @@ export const dbSections = {
     sqlite: {
         main: "# Sqlite Configuration",
         admin: "",
-        mainKeys: ["DB_FILE_NAME"],
+        mainKeys: ["DATABASE_URL"],
         adminKeys: [],
     },
 };

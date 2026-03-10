@@ -24,9 +24,7 @@ export function formatEnvFile(config: Config): string {
     const isSqlite = config.database === "sqlite";
 
     lines.push("# Database Connection");
-
-    if (isSqlite) lines.push(`DB_FILE_NAME=${baseEnv.DB_FILE_NAME}`);
-    else lines.push(`DATABASE_URL=${baseEnv.DATABASE_URL}`);
+    lines.push(`DATABASE_URL=${baseEnv.DATABASE_URL}`);
 
     const section = dbSections[config.database];
 
@@ -65,9 +63,7 @@ export function formatEnvExampleFile(config: Config): string {
     const isSqlite = config.database === "sqlite";
 
     lines.push("# Database Connection");
-
-    if (isSqlite) lines.push("DB_FILE_NAME=");
-    else lines.push("DATABASE_URL=");
+    lines.push("DATABASE_URL=");
 
     const section = dbSections[config.database];
 
