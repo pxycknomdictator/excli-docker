@@ -1,4 +1,5 @@
 import { join } from "node:path";
+import type { INTERACTIVE_PROMPTS } from "src/types";
 
 const rootDir = process.cwd();
 
@@ -34,6 +35,26 @@ export const buildCmd = {
     pnpm: "pnpm build",
     bun: "bun run build",
 };
+
+export const languages: INTERACTIVE_PROMPTS[] = [
+    { label: "JavaScript", emoji: "🟡", value: "js" },
+    { label: "TypeScript", emoji: "🔵", value: "ts" },
+];
+
+export const databases: INTERACTIVE_PROMPTS[] = [
+    { label: "MySQL", emoji: "🐬", value: "mysql" },
+    { label: "MariaDB", emoji: "🦭", value: "mariadb" },
+    { label: "SQLite", emoji: "🪶", value: "sqlite" },
+    { label: "PostgreSQL", emoji: "🐘", value: "postgres" },
+    { label: "MongoDB", emoji: "🍃", value: "mongodb" },
+];
+
+export const pkg_managers: INTERACTIVE_PROMPTS[] = [
+    { label: "npm", emoji: "📦", value: "npm" },
+    { label: "yarn", emoji: "🧶", value: "yarn" },
+    { label: "pnpm", emoji: "🚀", value: "pnpm" },
+    { label: "bun", emoji: "🥟", value: "bun" },
+];
 
 export const envConfigs = {
     mongodb: {
