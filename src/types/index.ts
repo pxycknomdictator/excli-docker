@@ -1,3 +1,9 @@
+export type INTERACTIVE_PROMPTS = {
+    label: string;
+    emoji: string;
+    value: string;
+};
+
 export type Config = {
     language: "ts" | "js";
     cache?: "redis";
