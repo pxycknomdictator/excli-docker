@@ -217,3 +217,10 @@ export const cacheSelection = {
 };
 
 export const BANNER_FONT = "Standard";
+
+export function generateOptions(options: INTERACTIVE_PROMPTS[]) {
+    return options.map(({ label, emoji, value }: INTERACTIVE_PROMPTS) => ({
+        label: `${label} ${emoji}`,
+        value: value,
+    }));
+}
