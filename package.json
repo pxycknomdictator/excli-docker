@@ -1,6 +1,6 @@
 {
     "name": "@excli/docker",
-    "version": "2.0.1",
+    "version": "2.1.0",
     "type": "module",
     "types": "dist/index.d.mts",
     "main": "dist/index.mjs",
