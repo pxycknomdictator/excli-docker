@@ -211,12 +211,6 @@ docker compose down      # Stop all Docker services
 docker compose up -d     # Start services in detached mode
 ```
 
-> **Note:** Add this script to your `package.json` for running your application inside Docker:
->
-> ```json
-> "docker:run": "node dist/main.js"
-> ```
-
 ---
 
 ### Managing Your Database
