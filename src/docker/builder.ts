@@ -1,5 +1,5 @@
-import type { Config } from "src/types";
-import { buildCmd, installCmd, lockFiles } from "src/config";
+import { buildCmd, installCmd, lockFiles } from "../config";
+import type { Config } from "../types";
 
 export function getTypeScriptDockerfile(config: Config): string {
     const { packageManager } = config;
@@ -26,7 +26,7 @@ COPY --from=builder /build/dist /app/dist
 
 EXPOSE 3000
 
-CMD [ "${packageManager}", "run", "docker:run" ]
+CMD ["node", "dist/main.js"]
 `;
 }
 
@@ -53,7 +53,7 @@ COPY --from=builder /build/src /app/src
 
 EXPOSE 3000
 
-CMD [ "${packageManager}", "run", "docker:run" ]
+CMD ["node", "dist/main.js"]
 `;
 }
 

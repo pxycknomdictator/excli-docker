@@ -1,7 +1,7 @@
 import { writeFile, appendFile } from "node:fs/promises";
 import { cancel } from "@clack/prompts";
-import { dbSections, envConfigs, cacheSelection } from "src/config";
-import type { Config, EnvConfig, GenerateFileArgs } from "src/types";
+import type { Config, EnvConfig, GenerateFileArgs } from "../types";
+import { cacheSelection, dbSections, envConfigs } from "../config";
 
 export async function generateFile(fileArgs: GenerateFileArgs) {
     const { fileLocation, fileContent } = fileArgs;

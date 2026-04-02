@@ -1,5 +1,5 @@
 import { join } from "node:path";
-import type { INTERACTIVE_PROMPTS } from "src/types";
+import type { INTERACTIVE_PROMPTS } from "../types";
 
 const rootDir = process.cwd();
 
@@ -19,7 +19,7 @@ export const lockFiles = {
     npm: "package-lock.json",
     yarn: "yarn.lock",
     pnpm: "pnpm-lock.yaml",
-    bun: "bun.lockb",
+    bun: "bun.lock",
 };
 
 export const installCmd = {

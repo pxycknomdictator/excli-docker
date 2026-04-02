@@ -1,12 +1,7 @@
 import { isCancel, select, confirm } from "@clack/prompts";
-import { terminate } from "src/utils";
-import type { Config } from "src/types";
-import {
-    databases,
-    generateOptions,
-    languages,
-    pkg_managers,
-} from "src/config";
+import type { Config } from "../types";
+import { databases, generateOptions, languages, pkg_managers } from "../config";
+import { terminate } from "../utils";
 
 async function promptLanguage(): Promise<Config["language"]> {
     const language = await select({

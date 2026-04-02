@@ -1,22 +1,22 @@
 import { existsSync } from "node:fs";
 import yaml from "js-yaml";
-import {
-    appendExistsFile,
-    formatEnvExampleFile,
-    formatEnvFile,
-    generateFile,
-} from "src/utils";
+import type { Config, GenerateFileArgs } from "../types";
+import { getDockerfile } from "../docker/builder";
+import { getDockerComposeFile } from "../docker/compose";
+import { getDockerIgnoreFile } from "../docker/dockerignore";
 import {
     dockerComposeFileLocation,
     dockerfileLocation,
     dockerIgnoreFileLocation,
     envExampleFileLocation,
     envFileLocation,
-} from "src/config";
-import { getDockerfile } from "src/docker/builder";
-import { getDockerComposeFile } from "src/docker/compose";
-import { getDockerIgnoreFile } from "src/docker/dockerignore";
-import type { Config, GenerateFileArgs } from "src/types";
+} from "../config";
+import {
+    appendExistsFile,
+    formatEnvExampleFile,
+    formatEnvFile,
+    generateFile,
+} from "../utils";
 
 export async function setupDocker(config: Config) {
     const dockerContent = getDockerfile(config);

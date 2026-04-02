@@ -1,4 +1,4 @@
-import type { Config, DockerComposeConfig } from "src/types";
+import type { Config, DockerComposeConfig } from "../types";
 
 function dockerMongodb(): DockerComposeConfig {
     return {
