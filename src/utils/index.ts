@@ -18,27 +18,41 @@ export function getEnvVariables(config: Config): EnvConfig {
     return dockerEnvConfiguration;
 }
 
-export function formatEnvFile(config: Config): string {
+export function formatEnvFiles(config: Config): {
+    envContent: string;
+    exEnvContent: string;
+} {
     const { baseEnv, dockerEnv } = getEnvVariables(config);
-    const lines: string[] = [];
+
+    const envLines: string[] = [];
+    const exEnvLines: string[] = [];
+
     const isSqlite = config.database === "sqlite";
 
-    lines.push("# Database Connection");
-    lines.push(`DATABASE_URL=${baseEnv.DATABASE_URL}`);
+    envLines.push("# Database Connection");
+    envLines.push(`DATABASE_URL=${baseEnv.DATABASE_URL}`);
+    exEnvLines.push("# Database Connection");
+    exEnvLines.push("DATABASE_URL=");
 
     const section = dbSections[config.database];
 
     if (!isSqlite) {
-        lines.push(`\n${section.main}`);
+        envLines.push(`\n${section.main}`);
         section.mainKeys.forEach((key) => {
-            lines.push(`${key}=${dockerEnv[key]}`);
+            envLines.push(`${key}=${dockerEnv[key]}`);
         });
-    }
-
-    if (!isSqlite) {
-        lines.push(`\n${section.admin}`);
+        envLines.push(`\n${section.admin}`);
         section.adminKeys.forEach((key) => {
-            lines.push(`${key}=${dockerEnv[key]}`);
+            envLines.push(`${key}=${dockerEnv[key]}`);
+        });
+
+        exEnvLines.push(`\n${section.main}`);
+        section.mainKeys.forEach((key) => {
+            exEnvLines.push(`${key}=`);
+        });
+        exEnvLines.push(`\n${section.admin}`);
+        section.adminKeys.forEach((key) => {
+            exEnvLines.push(`${key}=`);
         });
     }
 
@@ -46,53 +60,25 @@ export function formatEnvFile(config: Config): string {
         const redisEnv = envConfigs.redis;
         const redisSection = cacheSelection.redis;
 
-        lines.push(`\n# Redis Connection`);
-        lines.push(`REDIS_URL=${redisEnv.baseEnv.REDIS_URL}\n`);
+        envLines.push(`\n# Redis Connection`);
+        envLines.push(`REDIS_URL=${redisEnv.baseEnv.REDIS_URL}\n`);
 
-        lines.push(redisSection.main);
-        lines.push(`REDIS_PORT=${redisEnv.dockerEnv.REDIS_PORT}`);
-        lines.push(`REDIS_ARGS=${redisEnv.dockerEnv.REDIS_ARGS}`);
+        envLines.push(redisSection.main);
+        envLines.push(`REDIS_PORT=${redisEnv.dockerEnv.REDIS_PORT}`);
+        envLines.push(`REDIS_ARGS=${redisEnv.dockerEnv.REDIS_ARGS}`);
+
+        exEnvLines.push(`\n# Redis Connection`);
+        exEnvLines.push(`REDIS_URL=\n`);
+
+        exEnvLines.push(redisSection.main);
+        exEnvLines.push("REDIS_PORT=");
+        exEnvLines.push("REDIS_ARGS=");
     }
 
-    return lines.join("\n");
-}
-
-export function formatEnvExampleFile(config: Config): string {
-    const lines: string[] = [];
-
-    const isSqlite = config.database === "sqlite";
-
-    lines.push("# Database Connection");
-    lines.push("DATABASE_URL=");
-
-    const section = dbSections[config.database];
-
-    if (!isSqlite) {
-        lines.push(`\n${section.main}`);
-        section.mainKeys.forEach((key) => {
-            lines.push(`${key}=`);
-        });
-    }
-
-    if (!isSqlite) {
-        lines.push(`\n${section.admin}`);
-        section.adminKeys.forEach((key) => {
-            lines.push(`${key}=`);
-        });
-    }
-
-    if (config.cache === "redis") {
-        const redisSection = cacheSelection.redis;
-
-        lines.push(`\n# Redis Connection`);
-        lines.push(`REDIS_URL=\n`);
-
-        lines.push(redisSection.main);
-        lines.push("REDIS_PORT=");
-        lines.push("REDIS_ARGS=");
-    }
-
-    return lines.join("\n");
+    return {
+        envContent: envLines.join("\n"),
+        exEnvContent: exEnvLines.join("\n"),
+    };
 }
 
 export function terminate(message: string): never {

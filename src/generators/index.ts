@@ -11,12 +11,7 @@ import {
     envExampleFileLocation,
     envFileLocation,
 } from "../config";
-import {
-    appendExistsFile,
-    formatEnvExampleFile,
-    formatEnvFile,
-    generateFile,
-} from "../utils";
+import { appendExistsFile, formatEnvFiles, generateFile } from "../utils";
 
 export async function setupDocker(config: Config) {
     const dockerContent = getDockerfile(config);
@@ -48,14 +43,13 @@ export async function setupDocker(config: Config) {
 }
 
 export async function setupEnv(config: Config): Promise<void> {
-    const envContent = formatEnvFile(config);
-    const envExampleContent = formatEnvExampleFile(config);
+    const { envContent, exEnvContent } = formatEnvFiles(config);
 
     const dotenvs: GenerateFileArgs[] = [
         { fileLocation: envFileLocation, fileContent: envContent },
         {
             fileLocation: envExampleFileLocation,
-            fileContent: envExampleContent,
+            fileContent: exEnvContent,
         },
     ];
 
