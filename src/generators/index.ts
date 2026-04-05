@@ -37,9 +37,7 @@ export async function setupDocker(config: Config) {
         });
     }
 
-    await Promise.all(
-        docker.map(async (whale) => await generateFile({ ...whale })),
-    );
+    await Promise.all(docker.map((whale) => generateFile({ ...whale })));
 }
 
 export async function setupEnv(config: Config): Promise<void> {
@@ -54,12 +52,8 @@ export async function setupEnv(config: Config): Promise<void> {
     ];
 
     if (existsSync(envFileLocation) || existsSync(envExampleFileLocation)) {
-        await Promise.all(
-            dotenvs.map(async (env) => await appendExistsFile({ ...env })),
-        );
+        await Promise.all(dotenvs.map((env) => appendExistsFile({ ...env })));
     } else {
-        await Promise.all(
-            dotenvs.map(async (env) => await generateFile({ ...env })),
-        );
+        await Promise.all(dotenvs.map((env) => generateFile({ ...env })));
     }
 }
