@@ -41,6 +41,7 @@ export type DockerComposeConfig = {
         [key: string]: {
             container_name?: string;
             image?: string;
+            restart: "unless-stopped";
             ports?: string[];
             environment?: { [key: string]: string };
             networks?: string[];

@@ -6,6 +6,7 @@ function dockerMongodb(): DockerComposeConfig {
             database: {
                 container_name: "mongodb_container",
                 image: "mongo:8.0.17",
+                restart: "unless-stopped",
                 ports: ["${MONGODB_PORT}:27017"],
                 environment: {
                     MONGO_INITDB_DATABASE: "${MONGO_INITDB_DATABASE}",
@@ -29,6 +30,7 @@ function dockerMongodb(): DockerComposeConfig {
             admin: {
                 container_name: "mongodb_admin",
                 image: "mongo-express:1.0.2",
+                restart: "unless-stopped",
                 ports: ["${ADMIN_PANEL_PORT}:8081"],
                 environment: {
                     ME_CONFIG_MONGODB_ADMINUSERNAME:
@@ -56,6 +58,7 @@ function dockerPostgres(): DockerComposeConfig {
             database: {
                 container_name: "postgres_container",
                 image: "postgres:18",
+                restart: "unless-stopped",
                 ports: ["${POSTGRES_PORT}:5432"],
                 environment: {
                     POSTGRES_DB: "${POSTGRES_DB}",
@@ -74,6 +77,7 @@ function dockerPostgres(): DockerComposeConfig {
             admin: {
                 container_name: "postgres_admin",
                 image: "dpage/pgadmin4:9.12",
+                restart: "unless-stopped",
                 ports: ["${ADMIN_PANEL_PORT}:80"],
                 environment: {
                     PGADMIN_DEFAULT_EMAIL: "${PGADMIN_DEFAULT_EMAIL}",
@@ -94,6 +98,7 @@ function dockerMysql(): DockerComposeConfig {
             database: {
                 container_name: "mysql_container",
                 image: "mysql:8.4.6",
+                restart: "unless-stopped",
                 ports: ["${MYSQL_PORT}:3306"],
                 environment: {
                     MYSQL_DATABASE: "${MYSQL_DATABASE}",
@@ -116,6 +121,7 @@ function dockerMysql(): DockerComposeConfig {
             admin: {
                 container_name: "mysql_admin",
                 image: "phpmyadmin:5.2.3",
+                restart: "unless-stopped",
                 ports: ["${ADMIN_PANEL_PORT}:80"],
                 environment: { PMA_HOST: "${PMA_HOST}" },
                 networks: ["app_network"],
@@ -133,6 +139,7 @@ function dockerMariadb(): DockerComposeConfig {
             database: {
                 container_name: "mariadb_container",
                 image: "mariadb:11.4.5",
+                restart: "unless-stopped",
                 ports: ["${MARIADB_PORT}:3306"],
                 environment: {
                     MARIADB_DATABASE: "${MARIADB_DATABASE}",
@@ -155,6 +162,7 @@ function dockerMariadb(): DockerComposeConfig {
             admin: {
                 container_name: "mariadb_admin",
                 image: "phpmyadmin:5.2.3",
+                restart: "unless-stopped",
                 ports: ["${ADMIN_PANEL_PORT}:80"],
                 environment: { PMA_HOST: "${PMA_HOST}" },
                 networks: ["app_network"],
@@ -172,6 +180,7 @@ function dockerRedis(): DockerComposeConfig {
             cache: {
                 container_name: "redis_container",
                 image: "redis/redis-stack-server:7.4.0-v8",
+                restart: "unless-stopped",
                 ports: ["${REDIS_PORT}:6379"],
                 environment: { REDIS_ARGS: "${REDIS_ARGS}" },
                 networks: ["app_network"],
