@@ -41,15 +41,10 @@ export type DockerComposeConfig = {
         [key: string]: {
             container_name?: string;
             image?: string;
-            build?: {
-                context: string;
-                dockerfile: string;
-            };
             ports?: string[];
             environment?: { [key: string]: string };
             networks?: string[];
             volumes?: string[];
-            env_file?: string[];
             depends_on?: DependsOn;
             healthcheck?: HealthCheck;
         };
