@@ -21,22 +21,39 @@ export type EnvConfig = {
     dockerEnv: Record<string, string>;
 };
 
+type DependsOn =
+    | string[]
+    | {
+          [service: string]: {
+              condition: "service_started" | "service_healthy";
+          };
+      };
+
+type HealthCheck = {
+    test: string[];
+    interval?: string;
+    timeout?: string;
+    retries?: number;
+};
+
 export type DockerComposeConfig = {
     services: {
         [key: string]: {
-            container_name: string;
-            image: string;
-            ports: string[];
-            environment: { [key: string]: string };
-            networks: string[];
+            container_name?: string;
+            image?: string;
+            restart: "unless-stopped";
+            ports?: string[];
+            environment?: { [key: string]: string };
+            networks?: string[];
             volumes?: string[];
-            depends_on?: string[];
+            depends_on?: DependsOn;
+            healthcheck?: HealthCheck;
         };
     };
-    networks: {
+    networks?: {
         [key: string]: {};
     };
-    volumes: {
+    volumes?: {
         [key: string]: {};
     };
 };

@@ -6,6 +6,7 @@ function dockerMongodb(): DockerComposeConfig {
             database: {
                 container_name: "mongodb_container",
                 image: "mongo:8.0.17",
+                restart: "unless-stopped",
                 ports: ["${MONGODB_PORT}:27017"],
                 environment: {
                     MONGO_INITDB_DATABASE: "${MONGO_INITDB_DATABASE}",
@@ -14,10 +15,22 @@ function dockerMongodb(): DockerComposeConfig {
                 },
                 networks: ["app_network"],
                 volumes: ["mongo_volume:/data/db"],
+                healthcheck: {
+                    test: [
+                        "CMD",
+                        "mongosh",
+                        "--eval",
+                        "db.adminCommand('ping')",
+                    ],
+                    interval: "5s",
+                    timeout: "5s",
+                    retries: 10,
+                },
             },
             admin: {
                 container_name: "mongodb_admin",
                 image: "mongo-express:1.0.2",
+                restart: "unless-stopped",
                 ports: ["${ADMIN_PANEL_PORT}:8081"],
                 environment: {
                     ME_CONFIG_MONGODB_ADMINUSERNAME:
@@ -30,16 +43,12 @@ function dockerMongodb(): DockerComposeConfig {
                     ME_CONFIG_BASICAUTH_PASSWORD:
                         "${ME_CONFIG_BASICAUTH_PASSWORD}",
                 },
-                depends_on: ["database"],
+                depends_on: { database: { condition: "service_healthy" } },
                 networks: ["app_network"],
             },
         },
-        networks: {
-            app_network: {},
-        },
-        volumes: {
-            mongo_volume: {},
-        },
+        networks: { app_network: {} },
+        volumes: { mongo_volume: {} },
     };
 }
 
@@ -49,6 +58,7 @@ function dockerPostgres(): DockerComposeConfig {
             database: {
                 container_name: "postgres_container",
                 image: "postgres:18",
+                restart: "unless-stopped",
                 ports: ["${POSTGRES_PORT}:5432"],
                 environment: {
                     POSTGRES_DB: "${POSTGRES_DB}",
@@ -57,25 +67,28 @@ function dockerPostgres(): DockerComposeConfig {
                 },
                 networks: ["app_network"],
                 volumes: ["pg_volume:/var/lib/postgresql"],
+                healthcheck: {
+                    test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER"],
+                    interval: "5s",
+                    timeout: "5s",
+                    retries: 10,
+                },
             },
             admin: {
                 container_name: "postgres_admin",
                 image: "dpage/pgadmin4:9.12",
+                restart: "unless-stopped",
                 ports: ["${ADMIN_PANEL_PORT}:80"],
                 environment: {
                     PGADMIN_DEFAULT_EMAIL: "${PGADMIN_DEFAULT_EMAIL}",
                     PGADMIN_DEFAULT_PASSWORD: "${PGADMIN_DEFAULT_PASSWORD}",
                 },
                 networks: ["app_network"],
-                depends_on: ["database"],
+                depends_on: { database: { condition: "service_healthy" } },
             },
         },
-        networks: {
-            app_network: {},
-        },
-        volumes: {
-            pg_volume: {},
-        },
+        networks: { app_network: {} },
+        volumes: { pg_volume: {} },
     };
 }
 
@@ -85,6 +98,7 @@ function dockerMysql(): DockerComposeConfig {
             database: {
                 container_name: "mysql_container",
                 image: "mysql:8.4.6",
+                restart: "unless-stopped",
                 ports: ["${MYSQL_PORT}:3306"],
                 environment: {
                     MYSQL_DATABASE: "${MYSQL_DATABASE}",
@@ -94,24 +108,28 @@ function dockerMysql(): DockerComposeConfig {
                 },
                 networks: ["app_network"],
                 volumes: ["mysql_volume:/var/lib/mysql"],
+                healthcheck: {
+                    test: [
+                        "CMD-SHELL",
+                        "mysqladmin ping -h localhost -u root -p${MYSQL_ROOT_PASSWORD}",
+                    ],
+                    interval: "5s",
+                    timeout: "5s",
+                    retries: 10,
+                },
             },
             admin: {
                 container_name: "mysql_admin",
                 image: "phpmyadmin:5.2.3",
+                restart: "unless-stopped",
                 ports: ["${ADMIN_PANEL_PORT}:80"],
-                environment: {
-                    PMA_HOST: "${PMA_HOST}",
-                },
+                environment: { PMA_HOST: "${PMA_HOST}" },
                 networks: ["app_network"],
-                depends_on: ["database"],
+                depends_on: { database: { condition: "service_healthy" } },
             },
         },
-        networks: {
-            app_network: {},
-        },
-        volumes: {
-            mysql_volume: {},
-        },
+        networks: { app_network: {} },
+        volumes: { mysql_volume: {} },
     };
 }
 
@@ -121,6 +139,7 @@ function dockerMariadb(): DockerComposeConfig {
             database: {
                 container_name: "mariadb_container",
                 image: "mariadb:11.4.5",
+                restart: "unless-stopped",
                 ports: ["${MARIADB_PORT}:3306"],
                 environment: {
                     MARIADB_DATABASE: "${MARIADB_DATABASE}",
@@ -130,24 +149,28 @@ function dockerMariadb(): DockerComposeConfig {
                 },
                 networks: ["app_network"],
                 volumes: ["mariadb_volume:/var/lib/mysql"],
+                healthcheck: {
+                    test: [
+                        "CMD-SHELL",
+                        "healthcheck -u${MARIADB_USER} -p${MARIADB_PASSWORD}",
+                    ],
+                    interval: "5s",
+                    timeout: "5s",
+                    retries: 10,
+                },
             },
             admin: {
                 container_name: "mariadb_admin",
                 image: "phpmyadmin:5.2.3",
+                restart: "unless-stopped",
                 ports: ["${ADMIN_PANEL_PORT}:80"],
-                environment: {
-                    PMA_HOST: "${PMA_HOST}",
-                },
+                environment: { PMA_HOST: "${PMA_HOST}" },
                 networks: ["app_network"],
-                depends_on: ["database"],
+                depends_on: { database: { condition: "service_healthy" } },
             },
         },
-        networks: {
-            app_network: {},
-        },
-        volumes: {
-            mariadb_volume: {},
-        },
+        networks: { app_network: {} },
+        volumes: { mariadb_volume: {} },
     };
 }
 
@@ -157,20 +180,21 @@ function dockerRedis(): DockerComposeConfig {
             cache: {
                 container_name: "redis_container",
                 image: "redis/redis-stack-server:7.4.0-v8",
+                restart: "unless-stopped",
                 ports: ["${REDIS_PORT}:6379"],
-                environment: {
-                    REDIS_ARGS: "${REDIS_ARGS}",
-                },
+                environment: { REDIS_ARGS: "${REDIS_ARGS}" },
                 networks: ["app_network"],
                 volumes: ["redis_volume:/data"],
+                healthcheck: {
+                    test: ["CMD-SHELL", "redis-cli ping | grep -q PONG"],
+                    interval: "5s",
+                    timeout: "5s",
+                    retries: 10,
+                },
             },
         },
-        networks: {
-            app_network: {},
-        },
-        volumes: {
-            redis_volume: {},
-        },
+        networks: { app_network: {} },
+        volumes: { redis_volume: {} },
     };
 }
 
