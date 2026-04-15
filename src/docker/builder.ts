@@ -53,7 +53,7 @@ COPY --from=builder /build/src /app/src
 
 EXPOSE 3000
 
-CMD ["node", "dist/main.js"]
+CMD ["node", "src/main.js"]
 `;
 }
 
