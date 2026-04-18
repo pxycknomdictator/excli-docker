@@ -34,6 +34,7 @@ type HealthCheck = {
     interval?: string;
     timeout?: string;
     retries?: number;
+    start_period?: string;
 };
 
 export type DockerComposeConfig = {

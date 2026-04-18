@@ -19,12 +19,15 @@ function dockerMongodb(): DockerComposeConfig {
                     test: [
                         "CMD",
                         "mongosh",
+                        "--quiet",
+                        "mongodb://localhost:27017/admin",
                         "--eval",
-                        "db.adminCommand('ping')",
+                        "db.runCommand({ ping: 1 })",
                     ],
                     interval: "5s",
                     timeout: "5s",
                     retries: 10,
+                    start_period: "20s",
                 },
             },
             admin: {
@@ -68,10 +71,14 @@ function dockerPostgres(): DockerComposeConfig {
                 networks: ["app_network"],
                 volumes: ["pg_volume:/var/lib/postgresql"],
                 healthcheck: {
-                    test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER"],
+                    test: [
+                        "CMD-SHELL",
+                        "PGPASSWORD=${POSTGRES_PASSWORD} pg_isready -h localhost -U ${POSTGRES_USER} -d ${POSTGRES_DB}",
+                    ],
                     interval: "5s",
                     timeout: "5s",
                     retries: 10,
+                    start_period: "20s",
                 },
             },
             admin: {
@@ -111,11 +118,12 @@ function dockerMysql(): DockerComposeConfig {
                 healthcheck: {
                     test: [
                         "CMD-SHELL",
-                        "mysqladmin ping -h localhost -u root -p${MYSQL_ROOT_PASSWORD}",
+                        "mysqladmin ping -h localhost -u${MYSQL_USER} -p${MYSQL_PASSWORD} || exit 1",
                     ],
                     interval: "5s",
                     timeout: "5s",
                     retries: 10,
+                    start_period: "20s",
                 },
             },
             admin: {
@@ -152,11 +160,12 @@ function dockerMariadb(): DockerComposeConfig {
                 healthcheck: {
                     test: [
                         "CMD-SHELL",
-                        "healthcheck -u${MARIADB_USER} -p${MARIADB_PASSWORD}",
+                        "healthcheck.sh --connect --innodb_initialized",
                     ],
-                    interval: "5s",
+                    interval: "10s",
                     timeout: "5s",
-                    retries: 10,
+                    retries: 3,
+                    start_period: "30s",
                 },
             },
             admin: {
