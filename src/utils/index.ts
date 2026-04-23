@@ -65,6 +65,7 @@ export function formatEnvFiles(config: Config): {
 
         envLines.push(redisSection.main);
         envLines.push(`REDIS_PORT=${redisEnv.dockerEnv.REDIS_PORT}`);
+        envLines.push(`REDIS_PASSWORD=${redisEnv.dockerEnv.REDIS_PASSWORD}`);
         envLines.push(`REDIS_ARGS=${redisEnv.dockerEnv.REDIS_ARGS}`);
 
         exEnvLines.push(`\n# Redis Connection`);
@@ -72,6 +73,7 @@ export function formatEnvFiles(config: Config): {
 
         exEnvLines.push(redisSection.main);
         exEnvLines.push("REDIS_PORT=");
+        exEnvLines.push("REDIS_PASSWORD=");
         exEnvLines.push("REDIS_ARGS=");
     }
 
