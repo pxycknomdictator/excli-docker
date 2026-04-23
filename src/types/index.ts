@@ -45,6 +45,7 @@ export type DockerComposeConfig = {
             restart: "unless-stopped";
             ports?: string[];
             environment?: { [key: string]: string };
+            command?: string;
             networks?: string[];
             volumes?: string[];
             depends_on?: DependsOn;

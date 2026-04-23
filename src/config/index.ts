@@ -130,11 +130,13 @@ export const envConfigs = {
     },
     redis: {
         baseEnv: {
-            REDIS_URL: "redis://localhost:6379",
+            REDIS_URL: "redis://:rootpassword@localhost:6379",
         },
         dockerEnv: {
             REDIS_PORT: "6379",
-            REDIS_ARGS: "--appendonly yes --appendfsync everysec",
+            REDIS_PASSWORD: "rootpassword",
+            REDIS_ARGS:
+                "--requirepass rootpassword --appendonly yes --appendfsync everysec",
         },
     },
 };
@@ -212,7 +214,7 @@ export const dbSections = {
 export const cacheSelection = {
     redis: {
         main: "# Redis Configuration",
-        mainKeys: ["REDIS_PORT", "REDIS_ARGS"],
+        mainKeys: ["REDIS_PORT", "REDIS_PASSWORD", "REDIS_ARGS"],
     },
 };
 

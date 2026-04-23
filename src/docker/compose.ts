@@ -188,14 +188,21 @@ function dockerRedis(): DockerComposeConfig {
         services: {
             cache: {
                 container_name: "redis_container",
-                image: "redis/redis-stack-server:7.4.0-v8",
+                image: "redis:8.6.2",
                 restart: "unless-stopped",
                 ports: ["${REDIS_PORT}:6379"],
-                environment: { REDIS_ARGS: "${REDIS_ARGS}" },
+                environment: { REDIS_PASSWORD: "${REDIS_PASSWORD}" },
+                command: "redis-server ${REDIS_ARGS}",
                 networks: ["app_network"],
                 volumes: ["redis_volume:/data"],
                 healthcheck: {
-                    test: ["CMD-SHELL", "redis-cli ping | grep -q PONG"],
+                    test: [
+                        "CMD",
+                        "redis-cli",
+                        "-a",
+                        "${REDIS_PASSWORD}",
+                        "ping",
+                    ],
                     interval: "5s",
                     timeout: "5s",
                     retries: 10,
