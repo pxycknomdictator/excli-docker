@@ -5,11 +5,13 @@ const rootDir = process.cwd();
 
 const envFileName = ".env";
 const envExampleFileName = ".env.example";
+const prodEnvFileName = ".env.production";
 const dockerFileName = "Dockerfile";
 const dockerComposeFileName = "compose.yaml";
 const dockerIgnoreFileName = ".dockerignore";
 
 export const envFileLocation = join(rootDir, envFileName);
+export const prodEnvFileLocation = join(rootDir, prodEnvFileName);
 export const envExampleFileLocation = join(rootDir, envExampleFileName);
 export const dockerfileLocation = join(rootDir, dockerFileName);
 export const dockerIgnoreFileLocation = join(rootDir, dockerIgnoreFileName);

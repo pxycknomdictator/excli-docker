@@ -21,16 +21,24 @@ export function getEnvVariables(config: Config): EnvConfig {
 export function formatEnvFiles(config: Config): {
     envContent: string;
     exEnvContent: string;
+    prodEnvContent: string;
 } {
     const { baseEnv, dockerEnv } = getEnvVariables(config);
 
     const envLines: string[] = [];
+    const prodEnvLines: string[] = [];
     const exEnvLines: string[] = [];
 
     const isSqlite = config.database === "sqlite";
 
     envLines.push("# Database Connection");
     envLines.push(`DATABASE_URL=${baseEnv.DATABASE_URL}`);
+
+    prodEnvLines.push("# Database Connection");
+    prodEnvLines.push(
+        `DATABASE_URL=${baseEnv.DATABASE_URL?.replace("localhost", "database")}`,
+    );
+
     exEnvLines.push("# Database Connection");
     exEnvLines.push("DATABASE_URL=");
 
@@ -44,6 +52,17 @@ export function formatEnvFiles(config: Config): {
         envLines.push(`\n${section.admin}`);
         section.adminKeys.forEach((key) => {
             envLines.push(`${key}=${dockerEnv[key]}`);
+        });
+
+        prodEnvLines.push(`\n${section.main}`);
+        section.mainKeys.forEach((key) => {
+            prodEnvLines.push(
+                `${key}=${dockerEnv[key]?.replace("localhost", "database")}`,
+            );
+        });
+        prodEnvLines.push(`\n${section.admin}`);
+        section.adminKeys.forEach((key) => {
+            prodEnvLines.push(`${key}=${dockerEnv[key]}`);
         });
 
         exEnvLines.push(`\n${section.main}`);
@@ -68,6 +87,18 @@ export function formatEnvFiles(config: Config): {
         envLines.push(`REDIS_PASSWORD=${redisEnv.dockerEnv.REDIS_PASSWORD}`);
         envLines.push(`REDIS_ARGS=${redisEnv.dockerEnv.REDIS_ARGS}`);
 
+        prodEnvLines.push(`\n# Redis Connection`);
+        prodEnvLines.push(
+            `REDIS_URL=${redisEnv.baseEnv.REDIS_URL.replace("localhost", "cache")}\n`,
+        );
+
+        prodEnvLines.push(redisSection.main);
+        prodEnvLines.push(`REDIS_PORT=${redisEnv.dockerEnv.REDIS_PORT}`);
+        prodEnvLines.push(
+            `REDIS_PASSWORD=${redisEnv.dockerEnv.REDIS_PASSWORD}`,
+        );
+        prodEnvLines.push(`REDIS_ARGS=${redisEnv.dockerEnv.REDIS_ARGS}`);
+
         exEnvLines.push(`\n# Redis Connection`);
         exEnvLines.push(`REDIS_URL=\n`);
 
@@ -80,6 +111,7 @@ export function formatEnvFiles(config: Config): {
     return {
         envContent: envLines.join("\n"),
         exEnvContent: exEnvLines.join("\n"),
+        prodEnvContent: prodEnvLines.join("\n"),
     };
 }
 
