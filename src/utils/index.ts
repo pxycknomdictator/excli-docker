@@ -25,93 +25,64 @@ export function formatEnvFiles(config: Config): {
 } {
     const { baseEnv, dockerEnv } = getEnvVariables(config);
 
-    const envLines: string[] = [];
-    const prodEnvLines: string[] = [];
-    const exEnvLines: string[] = [];
-
-    const isSqlite = config.database === "sqlite";
-
-    envLines.push("# Database Connection");
-    envLines.push(`DATABASE_URL=${baseEnv.DATABASE_URL}`);
-
-    prodEnvLines.push("# Database Connection");
-    prodEnvLines.push(
+    const env: string[] = [
+        "# Database Connection",
+        `DATABASE_URL=${baseEnv.DATABASE_URL}`,
+    ];
+    const prod: string[] = [
+        "# Database Connection",
         `DATABASE_URL=${baseEnv.DATABASE_URL?.replace("localhost", "database")}`,
-    );
+    ];
+    const ex: string[] = ["# Database Connection", "DATABASE_URL="];
 
-    exEnvLines.push("# Database Connection");
-    exEnvLines.push("DATABASE_URL=");
+    if (config.database !== "sqlite") {
+        const section = dbSections[config.database];
 
-    const section = dbSections[config.database];
-
-    if (!isSqlite) {
-        envLines.push(`\n${section.main}`);
-        section.mainKeys.forEach((key) => {
-            envLines.push(`${key}=${dockerEnv[key]}`);
-        });
-        envLines.push(`\n${section.admin}`);
-        section.adminKeys.forEach((key) => {
-            envLines.push(`${key}=${dockerEnv[key]}`);
-        });
-
-        prodEnvLines.push(`\n${section.main}`);
-        section.mainKeys.forEach((key) => {
-            prodEnvLines.push(
-                `${key}=${dockerEnv[key]?.replace("localhost", "database")}`,
+        for (const [header, keys] of [
+            [section.main, section.mainKeys],
+            [section.admin, section.adminKeys],
+        ] as const) {
+            env.push(`\n${header}`, ...keys.map((k) => `${k}=${dockerEnv[k]}`));
+            prod.push(
+                `\n${header}`,
+                ...keys.map(
+                    (k) =>
+                        `${k}=${dockerEnv[k]?.replace("localhost", "database")}`,
+                ),
             );
-        });
-        prodEnvLines.push(`\n${section.admin}`);
-        section.adminKeys.forEach((key) => {
-            prodEnvLines.push(`${key}=${dockerEnv[key]}`);
-        });
-
-        exEnvLines.push(`\n${section.main}`);
-        section.mainKeys.forEach((key) => {
-            exEnvLines.push(`${key}=`);
-        });
-        exEnvLines.push(`\n${section.admin}`);
-        section.adminKeys.forEach((key) => {
-            exEnvLines.push(`${key}=`);
-        });
+            ex.push(`\n${header}`, ...keys.map((k) => `${k}=`));
+        }
     }
 
     if (config.cache === "redis") {
-        const redisEnv = envConfigs.redis;
-        const redisSection = cacheSelection.redis;
+        const { baseEnv: rb, dockerEnv: rd } = envConfigs.redis;
+        const keys = ["REDIS_PORT", "REDIS_PASSWORD", "REDIS_ARGS"] as const;
+        const header = cacheSelection.redis.main;
 
-        envLines.push(`\n# Redis Connection`);
-        envLines.push(`REDIS_URL=${redisEnv.baseEnv.REDIS_URL}\n`);
-
-        envLines.push(redisSection.main);
-        envLines.push(`REDIS_PORT=${redisEnv.dockerEnv.REDIS_PORT}`);
-        envLines.push(`REDIS_PASSWORD=${redisEnv.dockerEnv.REDIS_PASSWORD}`);
-        envLines.push(`REDIS_ARGS=${redisEnv.dockerEnv.REDIS_ARGS}`);
-
-        prodEnvLines.push(`\n# Redis Connection`);
-        prodEnvLines.push(
-            `REDIS_URL=${redisEnv.baseEnv.REDIS_URL.replace("localhost", "cache")}\n`,
+        env.push(
+            `\n# Redis Connection`,
+            `REDIS_URL=${rb.REDIS_URL}\n`,
+            header,
+            ...keys.map((k) => `${k}=${rd[k]}`),
         );
-
-        prodEnvLines.push(redisSection.main);
-        prodEnvLines.push(`REDIS_PORT=${redisEnv.dockerEnv.REDIS_PORT}`);
-        prodEnvLines.push(
-            `REDIS_PASSWORD=${redisEnv.dockerEnv.REDIS_PASSWORD}`,
+        prod.push(
+            `\n# Redis Connection`,
+            `REDIS_URL=${rb.REDIS_URL.replace("localhost", "cache")}\n`,
+            header,
+            ...keys.map((k) => `${k}=${rd[k]}`),
         );
-        prodEnvLines.push(`REDIS_ARGS=${redisEnv.dockerEnv.REDIS_ARGS}`);
-
-        exEnvLines.push(`\n# Redis Connection`);
-        exEnvLines.push(`REDIS_URL=\n`);
-
-        exEnvLines.push(redisSection.main);
-        exEnvLines.push("REDIS_PORT=");
-        exEnvLines.push("REDIS_PASSWORD=");
-        exEnvLines.push("REDIS_ARGS=");
+        ex.push(
+            `\n# Redis Connection`,
+            `REDIS_URL=\n`,
+            header,
+            ...keys.map((k) => `${k}=`),
+        );
     }
 
     return {
-        envContent: envLines.join("\n"),
-        exEnvContent: exEnvLines.join("\n"),
-        prodEnvContent: prodEnvLines.join("\n"),
+        envContent: env.join("\n"),
+        exEnvContent: ex.join("\n"),
+        prodEnvContent: prod.join("\n"),
     };
 }
 
