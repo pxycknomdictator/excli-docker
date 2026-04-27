@@ -26,7 +26,7 @@ COPY --from=builder /build/dist /app/dist
 
 EXPOSE 3000
 
-CMD ["node", "dist/main.js"]
+ENTRYPOINT ["node", "dist/main.js"]
 `;
 }
 
@@ -53,7 +53,7 @@ COPY --from=builder /build/src /app/src
 
 EXPOSE 3000
 
-CMD ["node", "src/main.js"]
+ENTRYPOINT ["node", "src/main.js"]
 `;
 }
 
