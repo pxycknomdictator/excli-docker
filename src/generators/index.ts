@@ -2,9 +2,10 @@ import { existsSync } from "node:fs";
 import yaml from "js-yaml";
 import type { Config, GenerateFileArgs } from "../types";
 import { getDockerfile } from "../docker/builder";
-import { getDockerComposeFile } from "../docker/compose";
+import { getDockerComposeAdmin, getDockerComposeFile } from "../docker/compose";
 import { getDockerIgnoreFile } from "../docker/dockerignore";
 import {
+    dockerComposeDevFileLocation,
     dockerComposeFileLocation,
     dockerfileLocation,
     dockerIgnoreFileLocation,
@@ -17,6 +18,7 @@ import { appendExistsFile, formatEnvFiles, generateFile } from "../utils";
 export async function setupDocker(config: Config) {
     const dockerContent = getDockerfile(config);
     const dockerComposeContentObject = getDockerComposeFile(config);
+    const dockerComposeAdminContentObject = getDockerComposeAdmin(config);
     const dockerIgnoreContent = getDockerIgnoreFile();
 
     const docker: GenerateFileArgs[] = [
@@ -34,6 +36,20 @@ export async function setupDocker(config: Config) {
 
         docker.push({
             fileLocation: dockerComposeFileLocation,
+            fileContent: dockerComposeContent,
+        });
+    }
+
+    if (typeof dockerComposeAdminContentObject !== "undefined") {
+        const dockerComposeContent = yaml.dump(
+            dockerComposeAdminContentObject,
+            {
+                indent: 4,
+            },
+        );
+
+        docker.push({
+            fileLocation: dockerComposeDevFileLocation,
             fileContent: dockerComposeContent,
         });
     }

@@ -30,6 +30,15 @@ function dockerMongodb(): DockerComposeConfig {
                     start_period: "20s",
                 },
             },
+        },
+        networks: { app_network: {} },
+        volumes: { mongo_volume: {} },
+    };
+}
+
+function dockerMongodbAdmin(): DockerComposeConfig {
+    return {
+        services: {
             admin: {
                 container_name: "mongodb_admin",
                 image: "mongo-express:1.0.2",
@@ -50,8 +59,6 @@ function dockerMongodb(): DockerComposeConfig {
                 networks: ["app_network"],
             },
         },
-        networks: { app_network: {} },
-        volumes: { mongo_volume: {} },
     };
 }
 
@@ -81,6 +88,15 @@ function dockerPostgres(): DockerComposeConfig {
                     start_period: "20s",
                 },
             },
+        },
+        networks: { app_network: {} },
+        volumes: { pg_volume: {} },
+    };
+}
+
+function dockerPostgresAdmin(): DockerComposeConfig {
+    return {
+        services: {
             admin: {
                 container_name: "postgres_admin",
                 image: "dpage/pgadmin4:9.12",
@@ -94,8 +110,6 @@ function dockerPostgres(): DockerComposeConfig {
                 depends_on: { database: { condition: "service_healthy" } },
             },
         },
-        networks: { app_network: {} },
-        volumes: { pg_volume: {} },
     };
 }
 
@@ -126,6 +140,15 @@ function dockerMysql(): DockerComposeConfig {
                     start_period: "20s",
                 },
             },
+        },
+        networks: { app_network: {} },
+        volumes: { mysql_volume: {} },
+    };
+}
+
+function dockerMysqlAdmin(): DockerComposeConfig {
+    return {
+        services: {
             admin: {
                 container_name: "mysql_admin",
                 image: "phpmyadmin:5.2.3",
@@ -136,8 +159,6 @@ function dockerMysql(): DockerComposeConfig {
                 depends_on: { database: { condition: "service_healthy" } },
             },
         },
-        networks: { app_network: {} },
-        volumes: { mysql_volume: {} },
     };
 }
 
@@ -168,6 +189,15 @@ function dockerMariadb(): DockerComposeConfig {
                     start_period: "30s",
                 },
             },
+        },
+        networks: { app_network: {} },
+        volumes: { mariadb_volume: {} },
+    };
+}
+
+function dockerMariadbAdmin(): DockerComposeConfig {
+    return {
+        services: {
             admin: {
                 container_name: "mariadb_admin",
                 image: "phpmyadmin:5.2.3",
@@ -178,8 +208,6 @@ function dockerMariadb(): DockerComposeConfig {
                 depends_on: { database: { condition: "service_healthy" } },
             },
         },
-        networks: { app_network: {} },
-        volumes: { mariadb_volume: {} },
     };
 }
 
@@ -254,4 +282,23 @@ export function getDockerComposeFile(
     }
 
     return database;
+}
+
+export function getDockerComposeAdmin(
+    config: Config,
+): DockerComposeConfig | undefined {
+    switch (config.database) {
+        case "mongodb":
+            return dockerMongodbAdmin();
+        case "postgres":
+            return dockerPostgresAdmin();
+        case "mysql":
+            return dockerMysqlAdmin();
+        case "mariadb":
+            return dockerMariadbAdmin();
+        case "sqlite":
+            return undefined;
+        default:
+            throw new Error("Invalid database selected");
+    }
 }

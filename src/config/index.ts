@@ -8,6 +8,7 @@ const envExampleFileName = ".env.example";
 const prodEnvFileName = ".env.production";
 const dockerFileName = "Dockerfile";
 const dockerComposeFileName = "compose.yaml";
+const dockerComposeDevFileName = "compose.dev.yaml";
 const dockerIgnoreFileName = ".dockerignore";
 
 export const envFileLocation = join(rootDir, envFileName);
@@ -16,6 +17,10 @@ export const envExampleFileLocation = join(rootDir, envExampleFileName);
 export const dockerfileLocation = join(rootDir, dockerFileName);
 export const dockerIgnoreFileLocation = join(rootDir, dockerIgnoreFileName);
 export const dockerComposeFileLocation = join(rootDir, dockerComposeFileName);
+export const dockerComposeDevFileLocation = join(
+    rootDir,
+    dockerComposeDevFileName,
+);
 
 export const lockFiles = {
     npm: "package-lock.json",
