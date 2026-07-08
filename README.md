@@ -167,7 +167,7 @@ npx @excli/docker --js --yarn --mongodb --redis
 #### Generated Files
 
 - **Dockerfile** - Production-optimized container configuration
-- **docker-compose.yml** - Multi-service orchestration with proper volume paths
+- **compose.dev.yml** - Multi-service orchestration with proper volume paths
 - **.env** - Environment variables for your configuration
 - **.env.example** - Template for team members
 
