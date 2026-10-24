@@ -66,6 +66,7 @@ export const pkg_managers: INTERACTIVE_PROMPTS[] = [
 export const envConfigs = {
     mongodb: {
         baseEnv: {
+            MONGODB_VERSION: "8.0.17",
             DATABASE_URL:
                 "mongodb://admin:password123@localhost:27017/app_db?authSource=admin",
         },
@@ -73,6 +74,7 @@ export const envConfigs = {
             MONGODB_PORT: "27017",
             ADMIN_PANEL_PORT: "6969",
             MONGODB_HOST: "localhost",
+            MONGODB_ADMIN_PANEL_VERSION: "1.0.2",
             MONGO_INITDB_DATABASE: "app_db",
             MONGO_INITDB_ROOT_USERNAME: "admin",
             MONGO_INITDB_ROOT_PASSWORD: "password123",
@@ -85,11 +87,13 @@ export const envConfigs = {
     },
     postgres: {
         baseEnv: {
+            POSTGRES_VERSION: "18",
             DATABASE_URL:
                 "postgresql://admin:password123@localhost:5432/app_db",
         },
         dockerEnv: {
             POSTGRES_PORT: "5432",
+            PGADMIN_PANEL_VERSION: "9.12",
             ADMIN_PANEL_PORT: "6969",
             POSTGRES_HOST: "localhost",
             POSTGRES_DB: "app_db",
@@ -101,10 +105,12 @@ export const envConfigs = {
     },
     mysql: {
         baseEnv: {
+            MYSQL_VERSION: "8.4.6",
             DATABASE_URL: "mysql://user:password123@localhost:3306/app_db",
         },
         dockerEnv: {
             MYSQL_PORT: "3306",
+            PHP_ADMIN_PANEL_VERSION: "5.2.3",
             ADMIN_PANEL_PORT: "6969",
             MYSQL_HOST: "localhost",
             MYSQL_DATABASE: "app_db",
@@ -122,11 +128,13 @@ export const envConfigs = {
     },
     mariadb: {
         baseEnv: {
+            MARIADB_VERSION: "11.4.5",
             DATABASE_URL: "mysql://user:password123@localhost:3306/app_db",
         },
         dockerEnv: {
             MARIADB_PORT: "3306",
             ADMIN_PANEL_PORT: "6969",
+            PHP_ADMIN_PANEL_VERSION: "5.2.3",
             MARIADB_HOST: "localhost",
             MARIADB_DATABASE: "app_db",
             MARIADB_USER: "user",
@@ -137,6 +145,7 @@ export const envConfigs = {
     },
     redis: {
         baseEnv: {
+            REDIS_VERSION: "8.6.2",
             REDIS_URL: "redis://:rootpassword@localhost:6379",
         },
         dockerEnv: {
@@ -155,12 +164,14 @@ export const dbSections = {
         mainKeys: [
             "MONGODB_PORT",
             "MONGODB_HOST",
+            "MONGODB_VERSION",
             "MONGO_INITDB_DATABASE",
             "MONGO_INITDB_ROOT_USERNAME",
             "MONGO_INITDB_ROOT_PASSWORD",
         ],
         adminKeys: [
             "ADMIN_PANEL_PORT",
+            "MONGODB_ADMIN_PANEL_VERSION",
             "ME_CONFIG_MONGODB_ADMINUSERNAME",
             "ME_CONFIG_MONGODB_ADMINPASSWORD",
             "ME_CONFIG_MONGODB_SERVER",
@@ -176,10 +187,12 @@ export const dbSections = {
             "POSTGRES_HOST",
             "POSTGRES_DB",
             "POSTGRES_USER",
+            "POSTGRES_VERSION",
             "POSTGRES_PASSWORD",
         ],
         adminKeys: [
             "ADMIN_PANEL_PORT",
+            "PGADMIN_PANEL_VERSION",
             "PGADMIN_DEFAULT_EMAIL",
             "PGADMIN_DEFAULT_PASSWORD",
         ],
@@ -190,12 +203,13 @@ export const dbSections = {
         mainKeys: [
             "MYSQL_PORT",
             "MYSQL_HOST",
+            "MYSQL_VERSION",
             "MYSQL_DATABASE",
             "MYSQL_USER",
             "MYSQL_PASSWORD",
             "MYSQL_ROOT_PASSWORD",
         ],
-        adminKeys: ["ADMIN_PANEL_PORT", "PMA_HOST"],
+        adminKeys: ["ADMIN_PANEL_PORT", "PMA_HOST", "PHP_ADMIN_PANEL_VERSION"],
     },
     mariadb: {
         main: "# MariaDB Configuration",
@@ -203,12 +217,13 @@ export const dbSections = {
         mainKeys: [
             "MARIADB_PORT",
             "MARIADB_HOST",
+            "MARIADB_VERSION",
             "MARIADB_DATABASE",
             "MARIADB_USER",
             "MARIADB_PASSWORD",
             "MARIADB_ROOT_PASSWORD",
         ],
-        adminKeys: ["ADMIN_PANEL_PORT", "PMA_HOST"],
+        adminKeys: ["ADMIN_PANEL_PORT", "PMA_HOST", "PHP_ADMIN_PANEL_VERSION"],
     },
     sqlite: {
         main: "# Sqlite Configuration",
@@ -221,7 +236,12 @@ export const dbSections = {
 export const cacheSelection = {
     redis: {
         main: "# Redis Configuration",
-        mainKeys: ["REDIS_PORT", "REDIS_PASSWORD", "REDIS_ARGS"],
+        mainKeys: [
+            "REDIS_PORT",
+            "REDIS_PASSWORD",
+            "REDIS_ARGS",
+            "REDIS_VERSION",
+        ],
     },
 };
 
