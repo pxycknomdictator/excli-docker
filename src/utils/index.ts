@@ -67,7 +67,7 @@ export function formatEnvFiles(config: Config): {
         );
         prod.push(
             `\n# Redis Connection`,
-            `REDIS_URL=${rb.REDIS_URL.replace("localhost", "cache")}\n`,
+            `REDIS_URL=${rb.REDIS_URL.replace("localhost", "redis")}\n`,
             header,
             ...keys.map((k) => `${k}=${rd[k]}`),
         );

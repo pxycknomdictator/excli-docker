@@ -4,7 +4,7 @@ function dockerMongodb(): DockerComposeConfig {
     return {
         services: {
             database: {
-                container_name: "mongodb_container",
+                container_name: "mongodb",
                 image: "mongo:8.0.17",
                 restart: "unless-stopped",
                 ports: ["${MONGODB_PORT}:27017"],
@@ -40,7 +40,7 @@ function dockerMongodbAdmin(): DockerComposeConfig {
     return {
         services: {
             admin: {
-                container_name: "mongodb_admin",
+                container_name: "admin",
                 image: "mongo-express:1.0.2",
                 restart: "unless-stopped",
                 ports: ["${ADMIN_PANEL_PORT}:8081"],
@@ -66,7 +66,7 @@ function dockerPostgres(): DockerComposeConfig {
     return {
         services: {
             database: {
-                container_name: "postgres_container",
+                container_name: "postgres",
                 image: "postgres:18",
                 restart: "unless-stopped",
                 ports: ["${POSTGRES_PORT}:5432"],
@@ -98,7 +98,7 @@ function dockerPostgresAdmin(): DockerComposeConfig {
     return {
         services: {
             admin: {
-                container_name: "postgres_admin",
+                container_name: "admin",
                 image: "dpage/pgadmin4:9.12",
                 restart: "unless-stopped",
                 ports: ["${ADMIN_PANEL_PORT}:80"],
@@ -117,7 +117,7 @@ function dockerMysql(): DockerComposeConfig {
     return {
         services: {
             database: {
-                container_name: "mysql_container",
+                container_name: "mysql",
                 image: "mysql:8.4.6",
                 restart: "unless-stopped",
                 ports: ["${MYSQL_PORT}:3306"],
@@ -150,7 +150,7 @@ function dockerMysqlAdmin(): DockerComposeConfig {
     return {
         services: {
             admin: {
-                container_name: "mysql_admin",
+                container_name: "admin",
                 image: "phpmyadmin:5.2.3",
                 restart: "unless-stopped",
                 ports: ["${ADMIN_PANEL_PORT}:80"],
@@ -166,7 +166,7 @@ function dockerMariadb(): DockerComposeConfig {
     return {
         services: {
             database: {
-                container_name: "mariadb_container",
+                container_name: "mariadb",
                 image: "mariadb:11.4.5",
                 restart: "unless-stopped",
                 ports: ["${MARIADB_PORT}:3306"],
@@ -199,7 +199,7 @@ function dockerMariadbAdmin(): DockerComposeConfig {
     return {
         services: {
             admin: {
-                container_name: "mariadb_admin",
+                container_name: "admin",
                 image: "phpmyadmin:5.2.3",
                 restart: "unless-stopped",
                 ports: ["${ADMIN_PANEL_PORT}:80"],
@@ -214,8 +214,8 @@ function dockerMariadbAdmin(): DockerComposeConfig {
 function dockerRedis(): DockerComposeConfig {
     return {
         services: {
-            cache: {
-                container_name: "redis_container",
+            redis: {
+                container_name: "memory",
                 image: "redis:8.6.2",
                 restart: "unless-stopped",
                 ports: ["${REDIS_PORT}:6379"],
