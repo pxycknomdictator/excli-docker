@@ -56,7 +56,7 @@ export function formatEnvFiles(config: Config): {
 
     if (config.cache === "redis") {
         const { baseEnv: rb, dockerEnv: rd } = envConfigs.redis;
-        const keys = ["REDIS_PORT", "REDIS_PASSWORD", "REDIS_ARGS"] as const;
+        const keys = cacheSelection.redis.mainKeys as (keyof typeof rd)[];
         const header = cacheSelection.redis.main;
 
         env.push(

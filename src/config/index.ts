@@ -66,11 +66,11 @@ export const pkg_managers: INTERACTIVE_PROMPTS[] = [
 export const envConfigs = {
     mongodb: {
         baseEnv: {
-            MONGODB_VERSION: "8.0.17",
             DATABASE_URL:
                 "mongodb://admin:password123@localhost:27017/app_db?authSource=admin",
         },
         dockerEnv: {
+            MONGODB_VERSION: "8.0.17",
             MONGODB_PORT: "27017",
             ADMIN_PANEL_PORT: "6969",
             MONGODB_HOST: "localhost",
@@ -87,11 +87,11 @@ export const envConfigs = {
     },
     postgres: {
         baseEnv: {
-            POSTGRES_VERSION: "18",
             DATABASE_URL:
                 "postgresql://admin:password123@localhost:5432/app_db",
         },
         dockerEnv: {
+            POSTGRES_VERSION: "18",
             POSTGRES_PORT: "5432",
             PGADMIN_PANEL_VERSION: "9.12",
             ADMIN_PANEL_PORT: "6969",
@@ -105,10 +105,10 @@ export const envConfigs = {
     },
     mysql: {
         baseEnv: {
-            MYSQL_VERSION: "8.4.6",
             DATABASE_URL: "mysql://user:password123@localhost:3306/app_db",
         },
         dockerEnv: {
+            MYSQL_VERSION: "8.4.6",
             MYSQL_PORT: "3306",
             PHP_ADMIN_PANEL_VERSION: "5.2.3",
             ADMIN_PANEL_PORT: "6969",
@@ -128,10 +128,10 @@ export const envConfigs = {
     },
     mariadb: {
         baseEnv: {
-            MARIADB_VERSION: "11.4.5",
             DATABASE_URL: "mysql://user:password123@localhost:3306/app_db",
         },
         dockerEnv: {
+            MARIADB_VERSION: "11.4.5",
             MARIADB_PORT: "3306",
             ADMIN_PANEL_PORT: "6969",
             PHP_ADMIN_PANEL_VERSION: "5.2.3",
@@ -145,10 +145,10 @@ export const envConfigs = {
     },
     redis: {
         baseEnv: {
-            REDIS_VERSION: "8.6.2",
             REDIS_URL: "redis://:rootpassword@localhost:6379",
         },
         dockerEnv: {
+            REDIS_VERSION: "8.6.2",
             REDIS_PORT: "6379",
             REDIS_PASSWORD: "rootpassword",
             REDIS_ARGS:
