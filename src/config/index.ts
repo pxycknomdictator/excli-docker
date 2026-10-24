@@ -80,7 +80,7 @@ export const envConfigs = {
             MONGO_INITDB_ROOT_PASSWORD: "password123",
             ME_CONFIG_MONGODB_ADMINUSERNAME: "admin",
             ME_CONFIG_MONGODB_ADMINPASSWORD: "password123",
-            ME_CONFIG_MONGODB_SERVER: "mongodb_container",
+            ME_CONFIG_MONGODB_SERVER: "mongodb",
             ME_CONFIG_BASICAUTH_USERNAME: "admin",
             ME_CONFIG_BASICAUTH_PASSWORD: "adminpassword",
         },
@@ -93,7 +93,7 @@ export const envConfigs = {
         dockerEnv: {
             POSTGRES_VERSION: "18",
             POSTGRES_PORT: "5432",
-            PGADMIN_PANEL_VERSION: "9.12",
+            PGADMIN_PANEL_VERSION: "9.18",
             ADMIN_PANEL_PORT: "6969",
             POSTGRES_HOST: "localhost",
             POSTGRES_DB: "app_db",
