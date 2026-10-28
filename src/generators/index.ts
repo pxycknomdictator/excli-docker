@@ -9,7 +9,6 @@ import {
     dockerComposeFileLocation,
     dockerfileLocation,
     dockerIgnoreFileLocation,
-    envExampleFileLocation,
     envFileLocation,
     prodEnvFileLocation,
 } from "../config";
@@ -58,22 +57,14 @@ export async function setupDocker(config: Config) {
 }
 
 export async function setupEnv(config: Config): Promise<void> {
-    const { envContent, exEnvContent, prodEnvContent } = formatEnvFiles(config);
+    const { envContent, prodEnvContent } = formatEnvFiles(config);
 
     const dotenvs: GenerateFileArgs[] = [
         { fileLocation: envFileLocation, fileContent: envContent },
         { fileLocation: prodEnvFileLocation, fileContent: prodEnvContent },
-        {
-            fileLocation: envExampleFileLocation,
-            fileContent: exEnvContent,
-        },
     ];
 
-    if (
-        existsSync(envFileLocation) ||
-        existsSync(envExampleFileLocation) ||
-        existsSync(prodEnvFileLocation)
-    ) {
+    if (existsSync(envFileLocation) || existsSync(prodEnvFileLocation)) {
         await Promise.all(dotenvs.map((env) => appendExistsFile({ ...env })));
     } else {
         await Promise.all(dotenvs.map((env) => generateFile({ ...env })));

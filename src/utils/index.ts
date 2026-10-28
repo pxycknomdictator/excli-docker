@@ -20,7 +20,6 @@ export function getEnvVariables(config: Config): EnvConfig {
 
 export function formatEnvFiles(config: Config): {
     envContent: string;
-    exEnvContent: string;
     prodEnvContent: string;
 } {
     const { baseEnv, dockerEnv } = getEnvVariables(config);
@@ -33,7 +32,6 @@ export function formatEnvFiles(config: Config): {
         "# Database Connection",
         `DATABASE_URL=${baseEnv.DATABASE_URL?.replace("localhost", "database")}`,
     ];
-    const ex: string[] = ["# Database Connection", "DATABASE_URL="];
 
     if (config.database !== "sqlite") {
         const section = dbSections[config.database];
@@ -50,7 +48,6 @@ export function formatEnvFiles(config: Config): {
                         `${k}=${dockerEnv[k]?.replace("localhost", "database")}`,
                 ),
             );
-            ex.push(`\n${header}`, ...keys.map((k) => `${k}=`));
         }
     }
 
@@ -71,19 +68,9 @@ export function formatEnvFiles(config: Config): {
             header,
             ...keys.map((k) => `${k}=${rd[k]}`),
         );
-        ex.push(
-            `\n# Redis Connection`,
-            `REDIS_URL=\n`,
-            header,
-            ...keys.map((k) => `${k}=`),
-        );
     }
 
-    return {
-        envContent: env.join("\n"),
-        exEnvContent: ex.join("\n"),
-        prodEnvContent: prod.join("\n"),
-    };
+    return { envContent: env.join("\n"), prodEnvContent: prod.join("\n") };
 }
 
 export function terminate(message: string): never {
