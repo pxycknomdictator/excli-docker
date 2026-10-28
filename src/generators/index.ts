@@ -5,7 +5,6 @@ import { getDockerfile } from "../docker/builder";
 import { getDockerComposeAdmin, getDockerComposeFile } from "../docker/compose";
 import { getDockerIgnoreFile } from "../docker/dockerignore";
 import {
-    dockerComposeDevFileLocation,
     dockerComposeFileLocation,
     dockerfileLocation,
     dockerIgnoreFileLocation,
@@ -28,27 +27,30 @@ export async function setupDocker(config: Config) {
         },
     ];
 
-    if (typeof dockerComposeContentObject !== "undefined") {
-        const dockerComposeContent = yaml.dump(dockerComposeContentObject, {
-            indent: 4,
-        });
-
-        docker.push({
-            fileLocation: dockerComposeFileLocation,
-            fileContent: dockerComposeContent,
-        });
-    }
-
-    if (typeof dockerComposeAdminContentObject !== "undefined") {
+    if (
+        typeof dockerComposeContentObject !== "undefined" ||
+        typeof dockerComposeAdminContentObject !== "undefined"
+    ) {
         const dockerComposeContent = yaml.dump(
-            dockerComposeAdminContentObject,
             {
-                indent: 4,
+                services: {
+                    ...dockerComposeContentObject?.services,
+                    ...dockerComposeAdminContentObject?.services,
+                },
+                networks: {
+                    ...dockerComposeContentObject?.networks,
+                    ...dockerComposeAdminContentObject?.networks,
+                },
+                volumes: {
+                    ...dockerComposeContentObject?.volumes,
+                    ...dockerComposeAdminContentObject?.volumes,
+                },
             },
+            { indent: 4 },
         );
 
         docker.push({
-            fileLocation: dockerComposeDevFileLocation,
+            fileLocation: dockerComposeFileLocation,
             fileContent: dockerComposeContent,
         });
     }
