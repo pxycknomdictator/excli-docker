@@ -1,15 +1,15 @@
 export function getDockerIgnoreFile(): string {
-    return `# Git files
-.git
+    return `# Git
+.git/
 .gitignore
 .gitattributes
 
 # CI/CD
-.github
+.github/
 .gitlab-ci.yml
 .travis.yml
-.circleci
-.jenkins
+.circleci/
+.jenkins/
 
 # Documentation
 README.md
@@ -25,9 +25,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
-package-lock.json
-yarn.lock
-pnpm-lock.yaml
 
 # IDE and editor files
 .vscode/
@@ -39,14 +36,14 @@ pnpm-lock.yaml
 *.sublime-project
 *.sublime-workspace
 
-# Test files
+# Tests and coverage
 tests/
 test/
+__tests__/
 *.test.js
 *.test.ts
 *.spec.js
 *.spec.ts
-__tests__/
 coverage/
 .nyc_output/
 
@@ -62,24 +59,18 @@ out/
 # Logs
 logs/
 *.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
 
-# Environment files
-.env
-.env.local
-.env.*.local
-.env.development
-.env.test
-.env.production
+# Environment files and secrets
+.env*
+**/.env*
 
 # Docker
 Dockerfile*
 docker-compose*.yml
+docker-compose*.yaml
 .dockerignore
 compose.yaml
+compose.yml
 
 # Temporary files
 tmp/
@@ -87,15 +78,11 @@ temp/
 *.tmp
 *.cache
 
-# OS files
+# Operating system files
 Thumbs.db
-.DS_Store
 desktop.ini
 
-# TypeScript
-*.tsbuildinfo
-
-# ESLint & Prettier
+# ESLint and Prettier
 .eslintcache
 .prettierignore
 `;
