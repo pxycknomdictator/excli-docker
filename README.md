@@ -1,271 +1,133 @@
-### Docker CLI Tool
+## Docker CLI Tool
 
-A powerful Docker configuration generator for creating production-ready containerized applications with TypeScript/JavaScript support, complete with database management and flexible package manager options.
+A CLI generator for production-ready Docker configurations for JavaScript and TypeScript projects, with your choice of database, package manager, and optional Redis.
 
 [![npm version](https://badge.fury.io/js/%40excli%2Fdocker.svg)](https://badge.fury.io/js/%40excli%2Fdocker)
 [![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)
 [![Node.js](https://img.shields.io/badge/Node.js-20+-green.svg)](https://nodejs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
 
----
+## Features
 
-### Why Choose This Generator?
+- TypeScript or JavaScript support
+- Databases: MySQL, MariaDB, PostgreSQL, SQLite, MongoDB
+- Optional Redis cache
+- Package managers: npm, yarn, pnpm, bun
+- Admin panel for each database
+- Interactive mode or quick flag-based setup
 
-A CLI tool for generating Docker configurations for JavaScript and TypeScript projects with customizable package managers and databases.
+## Requirements
 
-**Built for modern development:**
+- Node.js 20 or higher
+- npm, yarn, pnpm, or bun
+- Docker
 
-- 🚀 TypeScript or JavaScript support
-- 🐳 Production-ready Docker configurations
-- 🗄️ Pre-configured databases (MySQL, MariaDB, PostgreSQL, SQLite, MongoDB)
-- ⚡ Optional Redis cache support
-- 📦 Multiple package manager support (npm, yarn, pnpm, bun)
-- 🛠️ Admin panels included for database management
-- 🔧 Automatic .env file generation
-- ⚡ Modern Docker best practices
-- 🎯 **Interactive mode** for guided setup
-- 🎨 **Simple flag-based CLI** for quick configuration
+## Quick Start
 
----
-
-### Getting Started
-
-#### Interactive Mode (Recommended for Beginners)
-
-Simply run the command and follow the prompts:
+### Interactive mode
 
 ```bash
 npx @excli/docker
 ```
 
-The interactive mode will guide you through selecting:
+You'll be prompted for your database, language, Redis (optional), and package manager.
 
-- Database (MySQL, MariaDB, SQLite, PostgreSQL, MongoDB)
-- Programming language (TypeScript or JavaScript)
-- Redis (optional)
-- Package manager (npm, yarn, pnpm, bun)
-
-#### Quick Setup with Flags
-
-For experienced users who know what they want:
+### Flag mode
 
 ```bash
-# With database only
 npx @excli/docker --ts --pnpm --postgres
-
-# With database and Redis cache
-npx @excli/docker --ts --pnpm --postgres --redis
 ```
 
-**Or install globally:**
+### Global install
 
 ```bash
 npm install -g @excli/docker
 
-# Interactive mode
-excli-docker
-
-# With flags
-excli-docker --ts --pnpm --postgres
+excli-docker                          # interactive
+excli-docker --ts --pnpm --postgres   # with flags
 ```
 
-#### Requirements
+## Generated Files
 
-- Node.js 20 or higher
-- npm, yarn, pnpm or bun
-- Docker (required for running generated configurations)
+| File              | Purpose                                    |
+| ----------------- | ------------------------------------------ |
+| `Dockerfile`      | Production-optimized container image       |
+| `compose.yaml`    | Multi-service setup (app, database, admin) |
+| `.dockerignore`   | Keeps unnecessary files out of the image   |
+| `.env`            | Environment variables for development      |
+| `.env.production` | Environment variables for production       |
 
----
+## Flags
 
-### Usage
+| Category        | Flags                                                         |
+| --------------- | ------------------------------------------------------------- |
+| Language        | `--ts`, `--js`                                                |
+| Database        | `--mysql`, `--mariadb`, `--postgres`, `--sqlite`, `--mongodb` |
+| Cache           | `--redis` (optional, works with any database)                 |
+| Package manager | `--npm`, `--yarn`, `--pnpm`, `--bun`                          |
 
-#### Two Ways to Use
-
-**1. Interactive Mode (Easiest)**
+### Examples
 
 ```bash
-npx @excli/docker
-```
-
-Just answer the prompts and you're done!
-
-**2. Flag-Based Mode (Fastest)**
-
-```bash
-# TypeScript with PostgreSQL and pnpm
+# TypeScript + PostgreSQL + pnpm
 npx @excli/docker --ts --pnpm --postgres
 
-# JavaScript with MongoDB and npm
+# JavaScript + MongoDB + npm
 npx @excli/docker --js --npm --mongodb
 
-# TypeScript with MySQL and yarn
-npx @excli/docker --ts --yarn --mysql
+# TypeScript + MySQL + yarn + Redis
+npx @excli/docker --ts --yarn --mysql --redis
 
-# JavaScript with MariaDB and bun
+# JavaScript + MariaDB + bun
 npx @excli/docker --js --bun --mariadb
 
-# TypeScript with SQLite and yarn
+# TypeScript + SQLite + yarn
 npx @excli/docker --ts --yarn --sqlite
 ```
 
----
+## Databases and Admin Panels
 
-### Command-Line Flags
+| Database   | Admin Panel   | URL                     |
+| ---------- | ------------- | ----------------------- |
+| MySQL      | phpMyAdmin    | `http://localhost:6969` |
+| MariaDB    | phpMyAdmin    | `http://localhost:6969` |
+| PostgreSQL | pgAdmin       | `http://localhost:6969` |
+| MongoDB    | Mongo Express | `http://localhost:6969` |
+| SQLite     | None          | None                    |
 
-#### Language Flags
+> Some admin panels can take a minute to initialize on first startup.
 
-- `--ts` - TypeScript
-- `--js` - JavaScript
-
-#### Database Flags
-
-- `--mysql` - MySQL database
-- `--mariadb` - MariaDB database
-- `--postgres` - PostgreSQL database
-- `--sqlite` - SQLite database
-- `--mongodb` - MongoDB database
-
-#### Cache Flags (Optional)
-
-- `--redis` - Add Redis for caching (can be combined with any database)
-
-#### Package Manager Flags
-
-- `--npm` - npm package manager
-- `--yarn` - Yarn package manager
-- `--pnpm` - pnpm package manager
-- `--bun` - Bun package manager
-
-**Examples:**
+## Running Your Services
 
 ```bash
-# TypeScript with PostgreSQL and Yarn
-npx @excli/docker --ts --yarn --postgres
-excli-docker --ts --yarn --postgres
-
-# JavaScript with MongoDB and pnpm
-npx @excli/docker --js --pnpm --mongodb
-excli-docker --js --pnpm --mongodb
-
-# TypeScript with MySQL and bun
-npx @excli/docker --ts --bun --mysql
-
-# JavaScript with MariaDB and npm
-npx @excli/docker --js --npm --mariadb
-
-# TypeScript with PostgreSQL, pnpm, and Redis cache
-npx @excli/docker --ts --pnpm --postgres --redis
-
-# JavaScript with MongoDB, yarn, and Redis cache
-npx @excli/docker --js --yarn --mongodb --redis
+docker compose up        # start services
+docker compose up -d     # start in detached mode
+docker compose down      # stop services
 ```
 
----
-
-### What's Included
-
-#### Generated Files
-
-- **Dockerfile** - Production-optimized container configuration
-- **compose.dev.yml** - Multi-service orchestration with proper volume paths
-- **.env** - Environment variables for your configuration
-- **.env.example** - Template for team members
-
----
-
-#### Database Options
-
-Choose the database that fits your needs:
-
-| Database             | Admin Panel   | Admin Panel Port |
-| -------------------- | ------------- | ---------------- |
-| **MySQL**            | phpMyAdmin    | 6969             |
-| **MariaDB**          | phpMyAdmin    | 6969             |
-| **PostgreSQL**       | pgAdmin       | 6969             |
-| **MongoDB**          | Mongo Express | 6969             |
-| **SQLite**           | ---           | ---              |
-| **Redis** (Optional) |
-
-All database admin panels are accessible at `http://localhost:6969` after running `docker compose up`.
-
-> **Note:** Some admin panels might take a minute to initialize. Why? Great question! I wish I knew. Please be patient during first startup while they contemplate the meaning of life.
-
-#### Package Manager Support
-
-The tool automatically configures your Dockerfile for your chosen package manager:
-
-- **npm** - Default Node.js package manager
-- **yarn** - Fast, reliable, and secure dependency management
-- **pnpm** - Efficient disk space usage with hard links
-- **bun** - All-in-one JavaScript runtime and toolkit
-
----
-
-### Common Commands
-
-#### Docker & Databases
-
-```bash
-docker compose up        # Start database and admin panel
-docker compose down      # Stop all Docker services
-docker compose up -d     # Start services in detached mode
-```
-
----
-
-### Managing Your Database
-
-After running `docker compose up`, access your database admin panel at **http://localhost:6969**
-
-- **pgAdmin** - Full-featured PostgreSQL management
-- **phpMyAdmin** - Intuitive MySQL & MariaDB interface
-- **Mongo Express** - Simple MongoDB administration
-
----
-
-### Troubleshooting
+## Troubleshooting
 
 **Port already in use?**
-Check if another service is running on port 6969, or modify the ports in your `.env` file.
+Another service may be using port 6969. Stop it, or change the port in your `.env` file.
 
-**Docker issues?**
-Make sure Docker Desktop is running before executing `docker compose up`.
-
-**Package manager not found in container?**
-Ensure the generated Dockerfile includes the correct package manager installation steps.
-
-**Using old syntax?**
-If you're using the old v1.x syntax, please upgrade to the new flag-based syntax. See the [Breaking Changes](#-breaking-changes-v200) section.
+**Docker not working?**
+Make sure Docker Desktop (or the Docker daemon) is running before `docker compose up`.
 
 **Interactive mode not working?**
-Make sure you're using the latest version: `npm install -g @excli/docker@latest`
+Update to the latest version: `npm install -g @excli/docker@latest`
 
-**Need help?**
+**Still stuck?**
 Open an issue on GitHub with details about your problem.
 
----
+## Contributing
 
-### Contributing
+Contributions are welcome: bug reports, feature ideas, documentation fixes, and pull requests.
 
-Contributions are welcome! Feel free to:
+## License
 
-- Report bugs
-- Suggest new features
-- Submit pull requests
-- Improve documentation
+ISC. See the `LICENSE` file for details.
 
----
+## Author
 
-### License
-
-ISC License - see LICENSE file for details.
-
-### Author
-
-**Noman**  
-📧 [pxycknomdictator@gmail.com](mailto:pxycknomdictator@gmail.com)  
-🔗 [@pxycknomdictator](https://github.com/pxycknomdictator)
-
----
-
-**Happy coding! Built with ❤️ for developers who value productivity.**
+**Noman**
+[pxycknomdictator@gmail.com](mailto:pxycknomdictator@gmail.com) | [@pxycknomdictator](https://github.com/pxycknomdictator)
