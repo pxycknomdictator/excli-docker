@@ -25,7 +25,7 @@ export const lockFiles = {
 export const installCmd = {
     npm: "npm install",
     yarn: "npm install -g yarn && yarn install",
-    pnpm: "npm install -g pnpm && pnpm install",
+    pnpm: "npm install -g pnpm && pnpm install --ignore-workspace --config.dangerously-allow-all-builds=true",
     bun: "npm install -g bun && bun install",
 };
 
