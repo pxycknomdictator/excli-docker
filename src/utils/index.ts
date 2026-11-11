@@ -26,11 +26,11 @@ export function formatEnvFiles(config: Config): {
 
     const env: string[] = [
         "# Database Connection",
-        `DATABASE_URL=${baseEnv.DATABASE_URL}`,
+        `DATABASE_URL="${baseEnv.DATABASE_URL}"`,
     ];
     const prod: string[] = [
         "# Database Connection",
-        `DATABASE_URL=${baseEnv.DATABASE_URL?.replace("localhost", "database")}`,
+        `DATABASE_URL="${baseEnv.DATABASE_URL?.replace("localhost", "database")}"`,
     ];
 
     if (config.database !== "sqlite") {
@@ -40,12 +40,15 @@ export function formatEnvFiles(config: Config): {
             [section.main, section.mainKeys],
             [section.admin, section.adminKeys],
         ] as const) {
-            env.push(`\n${header}`, ...keys.map((k) => `${k}=${dockerEnv[k]}`));
+            env.push(
+                `\n${header}`,
+                ...keys.map((k) => `${k}="${dockerEnv[k]}"`),
+            );
             prod.push(
                 `\n${header}`,
                 ...keys.map(
                     (k) =>
-                        `${k}=${dockerEnv[k]?.replace("localhost", "database")}`,
+                        `${k}="${dockerEnv[k]?.replace("localhost", "database")}"`,
                 ),
             );
         }
@@ -58,15 +61,15 @@ export function formatEnvFiles(config: Config): {
 
         env.push(
             `\n# Redis Connection`,
-            `REDIS_URL=${rb.REDIS_URL}\n`,
+            `REDIS_URL="${rb.REDIS_URL}"\n`,
             header,
-            ...keys.map((k) => `${k}=${rd[k]}`),
+            ...keys.map((k) => `${k}="${rd[k]}"`),
         );
         prod.push(
             `\n# Redis Connection`,
-            `REDIS_URL=${rb.REDIS_URL.replace("localhost", "redis")}\n`,
+            `REDIS_URL="${rb.REDIS_URL.replace("localhost", "redis")}"\n`,
             header,
-            ...keys.map((k) => `${k}=${rd[k]}`),
+            ...keys.map((k) => `${k}="${rd[k]}"`),
         );
     }
 
