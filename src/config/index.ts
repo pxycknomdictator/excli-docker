@@ -1,4 +1,5 @@
-import { join } from "node:path";
+import { cwd } from "node:process";
+import { basename, join } from "node:path";
 import type { INTERACTIVE_PROMPTS } from "../types";
 
 const rootDir = process.cwd();
@@ -56,11 +57,18 @@ export const pkg_managers: INTERACTIVE_PROMPTS[] = [
     { label: "bun", emoji: "🥟", value: "bun" },
 ];
 
+export function getDirectoryName() {
+    const word = basename(cwd());
+    const directory = word.includes("-") ? word.replace("-", "_") : word;
+    return directory;
+}
+
+const databaseName = getDirectoryName();
+
 export const envConfigs = {
     mongodb: {
         baseEnv: {
-            DATABASE_URL:
-                "mongodb://admin:password123@localhost:27017/app_db?authSource=admin",
+            DATABASE_URL: `mongodb://admin:password123@localhost:27017/${databaseName}?authSource=admin`,
         },
         dockerEnv: {
             MONGODB_VERSION: "8.0.17",
@@ -68,7 +76,7 @@ export const envConfigs = {
             ADMIN_PANEL_PORT: "6969",
             MONGODB_HOST: "localhost",
             MONGODB_ADMIN_PANEL_VERSION: "1.0.2",
-            MONGO_INITDB_DATABASE: "app_db",
+            MONGO_INITDB_DATABASE: databaseName,
             MONGO_INITDB_ROOT_USERNAME: "admin",
             MONGO_INITDB_ROOT_PASSWORD: "password123",
             ME_CONFIG_MONGODB_ADMINUSERNAME: "admin",
@@ -80,8 +88,7 @@ export const envConfigs = {
     },
     postgres: {
         baseEnv: {
-            DATABASE_URL:
-                "postgresql://admin:password123@localhost:5432/app_db",
+            DATABASE_URL: `postgresql://admin:password123@localhost:5432/${databaseName}`,
         },
         dockerEnv: {
             POSTGRES_VERSION: "18",
@@ -89,7 +96,7 @@ export const envConfigs = {
             PGADMIN_PANEL_VERSION: "9.18",
             ADMIN_PANEL_PORT: "6969",
             POSTGRES_HOST: "localhost",
-            POSTGRES_DB: "app_db",
+            POSTGRES_DB: databaseName,
             POSTGRES_USER: "admin",
             POSTGRES_PASSWORD: "password123",
             PGADMIN_DEFAULT_EMAIL: "admin@example.com",
@@ -98,7 +105,7 @@ export const envConfigs = {
     },
     mysql: {
         baseEnv: {
-            DATABASE_URL: "mysql://user:password123@localhost:3306/app_db",
+            DATABASE_URL: `mysql://user:password123@localhost:3306/${databaseName}`,
         },
         dockerEnv: {
             MYSQL_VERSION: "8.4.6",
@@ -106,7 +113,7 @@ export const envConfigs = {
             PHP_ADMIN_PANEL_VERSION: "5.2.3",
             ADMIN_PANEL_PORT: "6969",
             MYSQL_HOST: "localhost",
-            MYSQL_DATABASE: "app_db",
+            MYSQL_DATABASE: databaseName,
             MYSQL_USER: "user",
             MYSQL_PASSWORD: "password123",
             MYSQL_ROOT_PASSWORD: "rootpassword",
@@ -121,7 +128,7 @@ export const envConfigs = {
     },
     mariadb: {
         baseEnv: {
-            DATABASE_URL: "mysql://user:password123@localhost:3306/app_db",
+            DATABASE_URL: `mysql://user:password123@localhost:3306/${databaseName}`,
         },
         dockerEnv: {
             MARIADB_VERSION: "11.4.5",
@@ -129,7 +136,7 @@ export const envConfigs = {
             ADMIN_PANEL_PORT: "6969",
             PHP_ADMIN_PANEL_VERSION: "5.2.3",
             MARIADB_HOST: "localhost",
-            MARIADB_DATABASE: "app_db",
+            MARIADB_DATABASE: databaseName,
             MARIADB_USER: "user",
             MARIADB_PASSWORD: "password123",
             MARIADB_ROOT_PASSWORD: "rootpassword",

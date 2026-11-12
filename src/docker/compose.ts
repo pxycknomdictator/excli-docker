@@ -1,3 +1,4 @@
+import { getDirectoryName } from "../config";
 import type { Config, DockerComposeConfig } from "../types";
 
 function dockerMongodb(directory: string): DockerComposeConfig {
@@ -247,7 +248,7 @@ export function getDockerComposeFile(
 ): DockerComposeConfig | undefined {
     let database: DockerComposeConfig | undefined;
     const hasRedis = config.cache === "redis";
-    const directory = config.directory;
+    const directory = getDirectoryName();
 
     switch (config.database) {
         case "mongodb":
@@ -288,7 +289,7 @@ export function getDockerComposeFile(
 export function getDockerComposeAdmin(
     config: Config,
 ): DockerComposeConfig | undefined {
-    const directory = config.directory;
+    const directory = getDirectoryName();
 
     switch (config.database) {
         case "mongodb":
