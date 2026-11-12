@@ -5,6 +5,7 @@ export type INTERACTIVE_PROMPTS = {
 };
 
 export type Config = {
+    directory?: string;
     language: "ts" | "js";
     cache?: "redis";
     database: "mysql" | "mariadb" | "sqlite" | "postgres" | "mongodb";

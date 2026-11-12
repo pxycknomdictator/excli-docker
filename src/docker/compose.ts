@@ -1,6 +1,6 @@
 import type { Config, DockerComposeConfig } from "../types";
 
-function dockerMongodb(): DockerComposeConfig {
+function dockerMongodb(directory: string): DockerComposeConfig {
     return {
         services: {
             database: {
@@ -13,7 +13,7 @@ function dockerMongodb(): DockerComposeConfig {
                     MONGO_INITDB_ROOT_USERNAME: "${MONGO_INITDB_ROOT_USERNAME}",
                     MONGO_INITDB_ROOT_PASSWORD: "${MONGO_INITDB_ROOT_PASSWORD}",
                 },
-                networks: ["app_network"],
+                networks: [directory],
                 volumes: ["mongo_volume:/data/db"],
                 healthcheck: {
                     test: [
@@ -31,12 +31,12 @@ function dockerMongodb(): DockerComposeConfig {
                 },
             },
         },
-        networks: { app_network: {} },
+        networks: { [directory]: {} },
         volumes: { mongo_volume: {} },
     };
 }
 
-function dockerMongodbAdmin(): DockerComposeConfig {
+function dockerMongodbAdmin(directory: string): DockerComposeConfig {
     return {
         services: {
             admin: {
@@ -56,13 +56,13 @@ function dockerMongodbAdmin(): DockerComposeConfig {
                         "${ME_CONFIG_BASICAUTH_PASSWORD}",
                 },
                 depends_on: { database: { condition: "service_healthy" } },
-                networks: ["app_network"],
+                networks: [directory],
             },
         },
     };
 }
 
-function dockerPostgres(): DockerComposeConfig {
+function dockerPostgres(directory: string): DockerComposeConfig {
     return {
         services: {
             database: {
@@ -75,7 +75,7 @@ function dockerPostgres(): DockerComposeConfig {
                     POSTGRES_USER: "${POSTGRES_USER}",
                     POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}",
                 },
-                networks: ["app_network"],
+                networks: [directory],
                 volumes: ["pg_volume:/var/lib/postgresql"],
                 healthcheck: {
                     test: [
@@ -89,12 +89,12 @@ function dockerPostgres(): DockerComposeConfig {
                 },
             },
         },
-        networks: { app_network: {} },
+        networks: { [directory]: {} },
         volumes: { pg_volume: {} },
     };
 }
 
-function dockerPostgresAdmin(): DockerComposeConfig {
+function dockerPostgresAdmin(directory: string): DockerComposeConfig {
     return {
         services: {
             admin: {
@@ -106,14 +106,14 @@ function dockerPostgresAdmin(): DockerComposeConfig {
                     PGADMIN_DEFAULT_EMAIL: "${PGADMIN_DEFAULT_EMAIL}",
                     PGADMIN_DEFAULT_PASSWORD: "${PGADMIN_DEFAULT_PASSWORD}",
                 },
-                networks: ["app_network"],
+                networks: [directory],
                 depends_on: { database: { condition: "service_healthy" } },
             },
         },
     };
 }
 
-function dockerMysql(): DockerComposeConfig {
+function dockerMysql(directory: string): DockerComposeConfig {
     return {
         services: {
             database: {
@@ -127,7 +127,7 @@ function dockerMysql(): DockerComposeConfig {
                     MYSQL_PASSWORD: "${MYSQL_PASSWORD}",
                     MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}",
                 },
-                networks: ["app_network"],
+                networks: [directory],
                 volumes: ["mysql_volume:/var/lib/mysql"],
                 healthcheck: {
                     test: [
@@ -141,12 +141,12 @@ function dockerMysql(): DockerComposeConfig {
                 },
             },
         },
-        networks: { app_network: {} },
+        networks: { [directory]: {} },
         volumes: { mysql_volume: {} },
     };
 }
 
-function dockerMysqlAdmin(): DockerComposeConfig {
+function dockerMysqlAdmin(directory: string): DockerComposeConfig {
     return {
         services: {
             admin: {
@@ -155,14 +155,14 @@ function dockerMysqlAdmin(): DockerComposeConfig {
                 restart: "unless-stopped",
                 ports: ["${ADMIN_PANEL_PORT}:80"],
                 environment: { PMA_HOST: "${PMA_HOST}" },
-                networks: ["app_network"],
+                networks: [directory],
                 depends_on: { database: { condition: "service_healthy" } },
             },
         },
     };
 }
 
-function dockerMariadb(): DockerComposeConfig {
+function dockerMariadb(directory: string): DockerComposeConfig {
     return {
         services: {
             database: {
@@ -176,7 +176,7 @@ function dockerMariadb(): DockerComposeConfig {
                     MARIADB_PASSWORD: "${MARIADB_PASSWORD}",
                     MARIADB_ROOT_PASSWORD: "${MARIADB_ROOT_PASSWORD}",
                 },
-                networks: ["app_network"],
+                networks: [directory],
                 volumes: ["mariadb_volume:/var/lib/mysql"],
                 healthcheck: {
                     test: [
@@ -190,12 +190,12 @@ function dockerMariadb(): DockerComposeConfig {
                 },
             },
         },
-        networks: { app_network: {} },
+        networks: { [directory]: {} },
         volumes: { mariadb_volume: {} },
     };
 }
 
-function dockerMariadbAdmin(): DockerComposeConfig {
+function dockerMariadbAdmin(directory: string): DockerComposeConfig {
     return {
         services: {
             admin: {
@@ -204,14 +204,14 @@ function dockerMariadbAdmin(): DockerComposeConfig {
                 restart: "unless-stopped",
                 ports: ["${ADMIN_PANEL_PORT}:80"],
                 environment: { PMA_HOST: "${PMA_HOST}" },
-                networks: ["app_network"],
+                networks: [directory],
                 depends_on: { database: { condition: "service_healthy" } },
             },
         },
     };
 }
 
-function dockerRedis(): DockerComposeConfig {
+function dockerRedis(directory: string): DockerComposeConfig {
     return {
         services: {
             redis: {
@@ -221,7 +221,7 @@ function dockerRedis(): DockerComposeConfig {
                 ports: ["${REDIS_PORT}:6379"],
                 environment: { REDIS_PASSWORD: "${REDIS_PASSWORD}" },
                 command: "redis-server ${REDIS_ARGS}",
-                networks: ["app_network"],
+                networks: [directory],
                 volumes: ["redis_volume:/data"],
                 healthcheck: {
                     test: [
@@ -237,7 +237,7 @@ function dockerRedis(): DockerComposeConfig {
                 },
             },
         },
-        networks: { app_network: {} },
+        networks: { [directory]: {} },
         volumes: { redis_volume: {} },
     };
 }
@@ -247,19 +247,20 @@ export function getDockerComposeFile(
 ): DockerComposeConfig | undefined {
     let database: DockerComposeConfig | undefined;
     const hasRedis = config.cache === "redis";
+    const directory = config.directory;
 
     switch (config.database) {
         case "mongodb":
-            database = dockerMongodb();
+            database = dockerMongodb(directory as string);
             break;
         case "postgres":
-            database = dockerPostgres();
+            database = dockerPostgres(directory as string);
             break;
         case "mysql":
-            database = dockerMysql();
+            database = dockerMysql(directory as string);
             break;
         case "mariadb":
-            database = dockerMariadb();
+            database = dockerMariadb(directory as string);
             break;
         case "sqlite":
             break;
@@ -268,7 +269,7 @@ export function getDockerComposeFile(
     }
 
     if (hasRedis) {
-        const redis = dockerRedis();
+        const redis = dockerRedis(directory as string);
 
         if (database) {
             return {
@@ -287,15 +288,17 @@ export function getDockerComposeFile(
 export function getDockerComposeAdmin(
     config: Config,
 ): DockerComposeConfig | undefined {
+    const directory = config.directory;
+
     switch (config.database) {
         case "mongodb":
-            return dockerMongodbAdmin();
+            return dockerMongodbAdmin(directory as string);
         case "postgres":
-            return dockerPostgresAdmin();
+            return dockerPostgresAdmin(directory as string);
         case "mysql":
-            return dockerMysqlAdmin();
+            return dockerMysqlAdmin(directory as string);
         case "mariadb":
-            return dockerMariadbAdmin();
+            return dockerMariadbAdmin(directory as string);
         case "sqlite":
             return undefined;
         default:

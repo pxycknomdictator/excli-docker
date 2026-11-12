@@ -1,3 +1,5 @@
+import { cwd } from "node:process";
+import { basename } from "node:path";
 import { existsSync } from "node:fs";
 import yaml from "js-yaml";
 import type { Config, GenerateFileArgs } from "../types";
@@ -14,9 +16,18 @@ import {
 import { appendExistsFile, formatEnvFiles, generateFile } from "../utils";
 
 export async function setupDocker(config: Config) {
-    const dockerContent = getDockerfile(config);
-    const dockerComposeContentObject = getDockerComposeFile(config);
-    const dockerComposeAdminContentObject = getDockerComposeAdmin(config);
+    const word = basename(cwd());
+    const directory = word.includes("-") ? word.replace("-", "_") : word;
+
+    const dockerContent = getDockerfile({ ...config, directory });
+    const dockerComposeContentObject = getDockerComposeFile({
+        ...config,
+        directory,
+    });
+    const dockerComposeAdminContentObject = getDockerComposeAdmin({
+        ...config,
+        directory,
+    });
     const dockerIgnoreContent = getDockerIgnoreFile();
 
     const docker: GenerateFileArgs[] = [
